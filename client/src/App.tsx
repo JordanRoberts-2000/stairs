@@ -1,9 +1,9 @@
-import Form from "./components/form/Form";
+import Form from "./features/form/Form";
 import Header from "./components/Header";
 
 function App() {
   return (
-    <div className="md:px-[30%] p-4">
+    <div className="mx-auto w-full max-w-xl border flex flex-col bg-background">
       <Header />
       <Form />
     </div>
