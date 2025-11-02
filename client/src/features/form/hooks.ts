@@ -1,6 +1,6 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import FormInput from "./components/fields/FormInput";
-import { FormToggleGroup } from "./components/fields/FormToggleGroup";
+import { DesignToggle } from "./components/fields/DesignToggle";
 import FormNumberOfTreads from "./components/fields/TreadsToggle";
 
 const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
@@ -8,7 +8,7 @@ const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
 const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
     Input: FormInput,
-    ToggleGroup: FormToggleGroup,
+    ToggleGroup: DesignToggle,
     TreadNumber: FormNumberOfTreads,
   },
   formComponents: {},

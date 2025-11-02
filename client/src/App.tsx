@@ -3,7 +3,7 @@ import Header from "./components/Header";
 
 function App() {
   return (
-    <div className="mx-auto w-full max-w-xl border flex flex-col bg-background">
+    <div className="mx-auto min-h-screen w-full max-w-xl border flex flex-col bg-background">
       <Header />
       <Form />
     </div>

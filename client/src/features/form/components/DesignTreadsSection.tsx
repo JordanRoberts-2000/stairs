@@ -1,16 +1,19 @@
 import { FORM_DEFAULTS, TREADS_CONFIG } from "../constants";
 import { withForm } from "../hooks";
 
-const ChildForm = withForm({
+const DesignTreadsSection = withForm({
   defaultValues: FORM_DEFAULTS,
-  render: function Render({ form }) {
+  render: ({ form }) => {
     return (
       <div className="space-y-8 border-t border-black pt-4">
         <form.AppField
           name="design"
           listeners={{
             onChange: ({ value }) => {
-              form.setFieldValue("treads", TREADS_CONFIG[value].default);
+              form.setFieldValue(
+                "treads",
+                TREADS_CONFIG[value].default.toString()
+              );
             },
           }}
         >
@@ -29,4 +32,4 @@ const ChildForm = withForm({
   },
 });
 
-export { ChildForm };
+export { DesignTreadsSection };

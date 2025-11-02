@@ -1,26 +1,27 @@
-import z, { ZodType } from "zod";
+import z from "zod";
+import { DESIGNS } from "./constants";
 
-function nullableInput<TSchema extends ZodType>(schema: TSchema) {
-  return schema.nullable().transform((value, ctx) => {
-    if (value === null) {
-      ctx.addIssue({
-        code: "invalid_type",
-        expected: schema._zod.def.type,
-        input: null,
-      });
-      return z.NEVER;
-    }
-    return value;
-  });
-}
+const FormInputNumber = (
+  additionalValidations?: (schema: z.ZodNumber) => z.ZodNumber
+) => {
+  const baseSchema = z
+    .string()
+    .trim()
+    .nonempty("required")
+    .pipe(z.coerce.number());
+
+  return additionalValidations
+    ? baseSchema.pipe(additionalValidations(z.number()))
+    : baseSchema;
+};
 
 export const formSchema = z.object({
-  customer: z.string().min(1),
-  site: z.string().min(1),
-  plot: nullableInput(z.number().positive()),
-  design: z.enum(["straight", "winder", "doubleWinder"]),
-  treads: nullableInput(z.number().positive().max(20)),
-  wos: nullableInput(z.number().positive().max(1500)),
+  customer: z.string().nonempty("required"),
+  site: z.string().nonempty("required"),
+  plot: FormInputNumber((n) => n.positive()),
+  wos: FormInputNumber((n) => n.positive().max(1500)),
+  design: z.enum(DESIGNS),
+  treads: FormInputNumber((n) => n.positive().max(20)),
 });
 
 export type FormSchema = z.infer<typeof formSchema>;

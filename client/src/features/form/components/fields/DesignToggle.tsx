@@ -1,17 +1,19 @@
-import type { FormSchema } from "../../schema";
+import type { FormSchemaInput } from "../../schema";
 import { Field, FieldError, FieldLabel } from "../../../../components/ui/field";
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from "../../../../components/ui/toggle-group";
-import { useFieldContext, withForm } from "../../hooks";
+import { useFieldContext } from "../../hooks";
 import StraightIcon from "@/assets/straight.svg?react";
-import { FORM_DEFAULTS } from "../../constants";
-// import { useStore } from "@tanstack/react-form";
+import { DESIGNS } from "../../constants";
 
-const FormToggleGroup = () => {
-  const field = useFieldContext<FormSchema["design"]>();
+const DesignToggle = () => {
+  const field = useFieldContext<FormSchemaInput["design"]>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+
+  const isDesign = (v: string): v is FormSchemaInput["design"] =>
+    (DESIGNS as readonly string[]).includes(v);
 
   return (
     <Field data-invalid={isInvalid}>
@@ -22,8 +24,8 @@ const FormToggleGroup = () => {
         type="single"
         className="w-full *:flex-1 *:border-2 *:border-black *:h-fit *:flex-col gap-3 *:py-4"
         value={field.state.value}
-        onValueChange={(value) => {
-          if (value) field.handleChange(value as FormSchema["design"]);
+        onValueChange={(val) => {
+          if (isDesign(val)) field.handleChange(val);
         }}
       >
         <ToggleGroupItem value="straight">
@@ -44,4 +46,4 @@ const FormToggleGroup = () => {
   );
 };
 
-export { FormToggleGroup };
+export { DesignToggle };

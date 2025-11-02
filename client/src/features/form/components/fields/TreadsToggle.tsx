@@ -15,9 +15,7 @@ type Props = {
 
 const FormNumberOfTreads = ({ design }: Props) => {
   const field = useFieldContext<FormSchemaInput["treads"]>();
-
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-  const { options, default: default_num } = TREADS_CONFIG[design];
 
   return (
     <Field data-invalid={isInvalid}>
@@ -25,11 +23,12 @@ const FormNumberOfTreads = ({ design }: Props) => {
       <ToggleGroup
         className="*:flex-1 *:border-2 *:border-black *:py-6 gap-2"
         type="single"
-        defaultValue={String(default_num)}
         value={String(field.state.value)}
-        onValueChange={(v) => field.handleChange(Number(v))}
+        onValueChange={(v) => {
+          if (v) field.handleChange(v);
+        }}
       >
-        {options.map((tread_num) => (
+        {TREADS_CONFIG[design].options.map((tread_num) => (
           <ToggleGroupItem key={tread_num} value={tread_num.toString()}>
             {tread_num}
           </ToggleGroupItem>

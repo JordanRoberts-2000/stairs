@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui";
 import { useAppForm } from "@/features/form/hooks";
-import { ChildForm } from "./components/Egg";
+import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { FORM_DEFAULTS } from "./constants";
 import { formSchema } from "./schema";
 
@@ -26,23 +26,16 @@ const Form = ({}) => {
         form.handleSubmit();
       }}
     >
-      <form.AppForm>
-        <div className="space-y-8 mb-8">
-          <form.AppField name="customer">
-            {(field) => <field.Input />}
-          </form.AppField>
-          <form.AppField name="site">
-            {(field) => <field.Input />}
-          </form.AppField>
-          <form.AppField name="plot">
-            {(field) => <field.Input />}
-          </form.AppField>
-          <form.AppField name="wos">{(field) => <field.Input />}</form.AppField>
-        </div>
-        <ChildForm form={form} />
-
-        <Button className="mt-8 mx-auto bg-orange-700">Submit</Button>
-      </form.AppForm>
+      <div className="space-y-8 mb-8">
+        <form.AppField name="customer">
+          {(field) => <field.Input />}
+        </form.AppField>
+        <form.AppField name="site">{(field) => <field.Input />}</form.AppField>
+        <form.AppField name="plot">{(field) => <field.Input />}</form.AppField>
+        <form.AppField name="wos">{(field) => <field.Input />}</form.AppField>
+      </div>
+      <DesignTreadsSection form={form} />
+      <Button className="mt-8 mx-auto bg-orange-700">Submit</Button>
     </form>
   );
 };
