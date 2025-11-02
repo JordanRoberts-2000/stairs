@@ -20,13 +20,13 @@ const Form = ({}) => {
 
   return (
     <form
-      className="p-4 flex flex-col border-t border-black mt-2 mx-2 pb-20"
+      className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
       }}
     >
-      <div className="space-y-8 mb-8">
+      <div className="space-y-10 mb-8">
         <form.AppField name="customer">
           {(field) => <field.Input />}
         </form.AppField>
@@ -35,7 +35,9 @@ const Form = ({}) => {
         <form.AppField name="wos">{(field) => <field.Input />}</form.AppField>
       </div>
       <DesignTreadsSection form={form} />
-      <Button className="mt-8 mx-auto bg-orange-700">Submit</Button>
+      <Button className="mt-8 mx-auto font-mono bg-neutral-800 size-fit text-2xl py-3 px-24 rounded-[8px]">
+        Submit
+      </Button>
     </form>
   );
 };

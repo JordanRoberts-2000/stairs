@@ -7,8 +7,8 @@ const FormInputNumber = (
   const baseSchema = z
     .string()
     .trim()
-    .nonempty("required")
-    .pipe(z.coerce.number());
+    .nonempty("Required")
+    .pipe(z.coerce.number("Needs to be a number"));
 
   return additionalValidations
     ? baseSchema.pipe(additionalValidations(z.number()))
@@ -16,12 +16,16 @@ const FormInputNumber = (
 };
 
 export const formSchema = z.object({
-  customer: z.string().nonempty("required"),
-  site: z.string().nonempty("required"),
-  plot: FormInputNumber((n) => n.positive()),
-  wos: FormInputNumber((n) => n.positive().max(1500)),
+  customer: z.string().nonempty("Required"),
+  site: z.string().nonempty("Required"),
+  plot: FormInputNumber(),
+  wos: FormInputNumber((n) =>
+    n.min(700, "Width too small").max(1500, "Width too large")
+  ),
   design: z.enum(DESIGNS),
-  treads: FormInputNumber((n) => n.positive().max(20)),
+  treads: FormInputNumber((n) =>
+    n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
+  ),
 });
 
 export type FormSchema = z.infer<typeof formSchema>;

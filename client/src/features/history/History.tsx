@@ -11,25 +11,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import HistorySection from "./HistorySection";
 
 export function History() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="ml-auto border-0">
-          <MenuIcon className="size-8" />
+        <Button
+          variant="outline"
+          className="ml-auto border-0 bg-neutral-800 text-white rounded-[8px] absolute right-1 shadow-none"
+        >
+          <MenuIcon className="size-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
-          <SheetDescription>
+      <SheetContent className="bg-stone-100 gap-0">
+        <SheetHeader className="border-b border-gray-500">
+          <SheetTitle>History</SheetTitle>
+          <SheetDescription className="sr-only">
             Make changes to your profile here. Click save when you&apos;re done.
           </SheetDescription>
         </SheetHeader>
-        <div className="grid flex-1 auto-rows-min gap-6 px-4"></div>
+        <HistorySection />
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
+          <Button>Temp Clear History</Button>
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
           </SheetClose>

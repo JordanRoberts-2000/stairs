@@ -2,6 +2,7 @@ import {
   Field,
   FieldError,
   FieldLabel,
+  Input,
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui";
@@ -19,9 +20,11 @@ const FormNumberOfTreads = ({ design }: Props) => {
 
   return (
     <Field data-invalid={isInvalid}>
-      <FieldLabel htmlFor={field.name}>Number of Treads</FieldLabel>
+      <FieldLabel htmlFor={field.name} className="font-black text-md">
+        Number of Treads
+      </FieldLabel>
       <ToggleGroup
-        className="*:flex-1 *:border-2 *:border-black *:py-6 gap-2"
+        className="gap-2 relative"
         type="single"
         value={String(field.state.value)}
         onValueChange={(v) => {
@@ -29,13 +32,28 @@ const FormNumberOfTreads = ({ design }: Props) => {
         }}
       >
         {TREADS_CONFIG[design].options.map((tread_num) => (
-          <ToggleGroupItem key={tread_num} value={tread_num.toString()}>
+          <ToggleGroupItem
+            key={tread_num}
+            value={tread_num.toString()}
+            className="font-black flex-1 border-2 shadow-md! rounded-[4px]! border-primary py-6"
+          >
             {tread_num}
           </ToggleGroupItem>
         ))}
-        <ToggleGroupItem value="custom">Custom</ToggleGroupItem>
+        <Input
+          placeholder="Custom"
+          className="placeholder:text-center text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          maxLength={2}
+        />
+        {isInvalid && (
+          <FieldError
+            errors={field.state.meta.errors}
+            className="absolute font-bold text-xs right-0 -top-2 -translate-y-full pr-2"
+          />
+        )}
       </ToggleGroup>
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   );
 };

@@ -1,11 +1,13 @@
 import type { FormSchemaInput } from "../../schema";
-import { Field, FieldError, FieldLabel } from "../../../../components/ui/field";
+import { Field, FieldLabel } from "../../../../components/ui/field";
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from "../../../../components/ui/toggle-group";
 import { useFieldContext } from "../../hooks";
-import StraightIcon from "@/assets/straight.svg?react";
+import StraightIcon from "@/assets/design/straight.svg?react";
+import WinderIcon from "@/assets/design/winder.svg?react";
+import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
 import { DESIGNS } from "../../constants";
 
 const DesignToggle = () => {
@@ -16,32 +18,34 @@ const DesignToggle = () => {
     (DESIGNS as readonly string[]).includes(v);
 
   return (
-    <Field data-invalid={isInvalid}>
-      <FieldLabel htmlFor={field.name} className="capitalize">
+    <Field data-invalid={isInvalid} className="relative">
+      <FieldLabel
+        htmlFor={field.name}
+        className="capitalize font-black text-md text-black!"
+      >
         {field.name}
       </FieldLabel>
       <ToggleGroup
         type="single"
-        className="w-full *:flex-1 *:border-2 *:border-black *:h-fit *:flex-col gap-3 *:py-4"
+        className="w-full *:flex-1 *:border-2 *:border-primary *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
         value={field.state.value}
         onValueChange={(val) => {
           if (isDesign(val)) field.handleChange(val);
         }}
       >
-        <ToggleGroupItem value="straight">
-          <StraightIcon />
+        <ToggleGroupItem value="straight" className="font-black! text-xs!">
+          <StraightIcon className="size-8" />
           Straight
         </ToggleGroupItem>
-        <ToggleGroupItem value="winder">
-          <StraightIcon />
+        <ToggleGroupItem value="winder" className="font-black text-xs!">
+          <WinderIcon className="size-8" />
           Winder
         </ToggleGroupItem>
-        <ToggleGroupItem value="doubleWinder">
-          <StraightIcon />
-          Double winder
+        <ToggleGroupItem value="doubleWinder" className="font-black text-xs!">
+          <DoubleWinderIcon className="size-8" />
+          Double Winder
         </ToggleGroupItem>
       </ToggleGroup>
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   );
 };
