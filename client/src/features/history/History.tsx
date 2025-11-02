@@ -12,8 +12,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import HistorySection from "./HistorySection";
+import { useActions } from "@/store";
 
 export function History() {
+  const { clearData } = useActions();
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -33,7 +36,7 @@ export function History() {
         </SheetHeader>
         <HistorySection />
         <SheetFooter>
-          <Button>Temp Clear History</Button>
+          <Button onClick={clearData}>Temp Clear History</Button>
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
           </SheetClose>

@@ -1,8 +1,12 @@
+import { useEntries } from "@/store";
 import { History } from "../features/history/History";
 import { Button } from "./ui";
 import Profile from "@/assets/basketball.svg?react";
 
 const Header = ({}) => {
+  const count = useEntries().length;
+  const MAX = 14;
+
   return (
     <header className="flex flex-col px-2 relative">
       <div className="flex pt-2">
@@ -13,13 +17,13 @@ const Header = ({}) => {
 
         <History />
       </div>
-      <div className="ml-auto pr-1 pb-1 text-xs font-bold">6 / 14</div>
+      <div className="ml-auto pr-1 pb-1 text-xs font-bold">{count} / 14</div>
       <div className="h-[6px] flex mb-2 *:outline *:outline-neutral-600 *:rounded-[1px] gap-1 rounded-xl">
-        {[...Array(6)].map(() => (
-          <div className="flex-1 bg-cyan-700"></div>
-        ))}
-        {[...Array(8)].map(() => (
-          <div className="flex-1"></div>
+        {Array.from({ length: MAX }, (_, i) => (
+          <div
+            key={`bar-${i}`}
+            className={`flex-1 ${i < count ? "bg-cyan-700" : ""}`}
+          />
         ))}
       </div>
     </header>

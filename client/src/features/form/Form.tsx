@@ -3,18 +3,21 @@ import { useAppForm } from "@/features/form/hooks";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { FORM_DEFAULTS } from "./constants";
 import { formSchema } from "./schema";
+import { useActions } from "@/store";
 
 const Form = ({}) => {
+  const { addData } = useActions();
+
   const form = useAppForm({
     defaultValues: FORM_DEFAULTS,
     validators: {
       onSubmit: formSchema,
     },
-    onSubmit: ({ value }) => {
-      alert(`successful: ${JSON.stringify(value, null, 2)}`);
-    },
-    onSubmitInvalid: ({ value }) => {
-      alert(`failed: ${JSON.stringify(value, null, 2)}`);
+    onSubmit: ({ value, formApi }) => {
+      const entry = formSchema.parse(value);
+      addData(entry);
+      formApi.reset();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
   });
 
