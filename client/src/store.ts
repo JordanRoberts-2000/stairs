@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { FormSchema } from "./features/form/schema";
 
 type Store = {
@@ -7,18 +8,25 @@ type Store = {
 };
 
 type StoreActions = {
-  addData: (entry: FormSchema) => void;
-  clearData: () => void;
+  addEntry: (entry: FormSchema) => void;
+  clearEntries: () => void;
 };
 
-const useStore = create<Store>((set) => ({
-  entries: [],
-  actions: {
-    addData: (entry: FormSchema) =>
-      set((state) => ({ entries: [...state.entries, entry] })),
-    clearData: () => set({ entries: [] }),
-  },
-}));
+const useStore = create<Store>()(
+  persist(
+    (set) => ({
+      entries: [],
+      actions: {
+        addEntry: (entry: FormSchema) =>
+          set((state) => ({ entries: [...state.entries, entry] })),
+        clearEntries: () => {
+          set({ entries: [] });
+        },
+      },
+    }),
+    { name: "store", partialize: (s) => ({ entries: s.entries }) }
+  )
+);
 
 export const useEntries = () => useStore((state) => state.entries);
 

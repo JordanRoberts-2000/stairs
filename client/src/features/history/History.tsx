@@ -15,7 +15,7 @@ import HistorySection from "./HistorySection";
 import { useActions } from "@/store";
 
 export function History() {
-  const { clearData } = useActions();
+  const { clearEntries } = useActions();
 
   return (
     <Sheet>
@@ -36,7 +36,7 @@ export function History() {
         </SheetHeader>
         <HistorySection />
         <SheetFooter>
-          <Button onClick={clearData}>Temp Clear History</Button>
+          <Button onClick={clearEntries}>Temp Clear History</Button>
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
           </SheetClose>

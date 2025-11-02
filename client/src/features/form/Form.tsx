@@ -6,7 +6,7 @@ import { formSchema } from "./schema";
 import { useActions } from "@/store";
 
 const Form = ({}) => {
-  const { addData } = useActions();
+  const { addEntry } = useActions();
 
   const form = useAppForm({
     defaultValues: FORM_DEFAULTS,
@@ -15,7 +15,7 @@ const Form = ({}) => {
     },
     onSubmit: ({ value, formApi }) => {
       const entry = formSchema.parse(value);
-      addData(entry);
+      addEntry(entry);
       formApi.reset();
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
