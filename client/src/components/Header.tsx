@@ -1,6 +1,5 @@
 import { useEntries } from "@/store";
 import { History } from "../features/history/History";
-import { Button } from "./ui";
 import Profile from "@/assets/basketball.svg?react";
 
 const Header = ({}) => {

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import HistoryIcon from "@/assets/clock.svg?react";
 import MenuIcon from "@/assets/menu.svg?react";
 import {
   Sheet,
