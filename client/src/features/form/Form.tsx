@@ -34,8 +34,12 @@ const Form = ({}) => {
           {(field) => <field.Input />}
         </form.AppField>
         <form.AppField name="site">{(field) => <field.Input />}</form.AppField>
-        <form.AppField name="plot">{(field) => <field.Input />}</form.AppField>
-        <form.AppField name="wos">{(field) => <field.Input />}</form.AppField>
+        <form.AppField name="plot">
+          {(field) => <field.Input inputMode="numeric" />}
+        </form.AppField>
+        <form.AppField name="wos">
+          {(field) => <field.Input inputMode="numeric" />}
+        </form.AppField>
       </div>
       <DesignTreadsSection form={form} />
       <Button className="mt-8 mx-auto font-mono bg-neutral-800 size-fit text-2xl py-3 px-24 rounded-[8px]">

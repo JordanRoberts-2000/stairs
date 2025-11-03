@@ -20,13 +20,19 @@ const treadSchema = z
     z.object({
       kind: z.literal("preset"),
       value: FormInputNumber((n) =>
-        n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
+        n
+          .int("Invalid tread number")
+          .min(1, "Invalid tread number")
+          .max(20, "Tread limit exceeded")
       ),
     }),
     z.object({
       kind: z.literal("custom"),
       value: FormInputNumber((n) =>
-        n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
+        n
+          .int("Invalid tread number")
+          .min(1, "Invalid tread number")
+          .max(20, "Tread limit exceeded")
       ),
     }),
   ])
@@ -35,9 +41,12 @@ const treadSchema = z
 export const formSchema = z.object({
   customer: z.string().nonempty("Required"),
   site: z.string().nonempty("Required"),
-  plot: FormInputNumber(),
+  plot: FormInputNumber((n) => n.int("Invalid number")),
   wos: FormInputNumber((n) =>
-    n.min(700, "Width too small").max(1500, "Width too large")
+    n
+      .int("Invalid number")
+      .min(700, "Width too small")
+      .max(1500, "Width too large")
   ),
   design: z.enum(DESIGNS),
   treads: treadSchema,
