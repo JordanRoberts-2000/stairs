@@ -4,6 +4,7 @@ import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { FORM_DEFAULTS } from "./constants";
 import { formSchema } from "./schema";
 import { useActions } from "@/store";
+import { toast } from "sonner";
 
 const Form = ({}) => {
   const { addEntry } = useActions();
@@ -17,6 +18,7 @@ const Form = ({}) => {
       const entry = formSchema.parse(value);
       addEntry(entry);
       formApi.reset();
+      toast.success(`submitted successfully`);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
   });

@@ -15,7 +15,7 @@ pub struct AppConfig {
 impl AppConfig {
     pub fn load_from_env() -> Self {
         Self {
-            port: parse_env("PORT", 3030),
+            port: parse_env("PORT", 3020),
             max_concurrent_requests: parse_env("MAX_CONCURRENT_REQUESTS", 100),
             request_timeout_secs: parse_env("REQUEST_TIMEOUT_SECS", 30),
             rate_per_second: parse_env("RATE_PER_SECOND", 30),
