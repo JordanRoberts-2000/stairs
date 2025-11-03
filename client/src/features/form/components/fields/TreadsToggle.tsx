@@ -26,9 +26,11 @@ const FormNumberOfTreads = ({ design }: Props) => {
       <ToggleGroup
         className="gap-2 relative"
         type="single"
-        value={String(field.state.value)}
-        onValueChange={(v) => {
-          if (v) field.handleChange(v);
+        value={
+          field.state.value.kind === "preset" ? field.state.value.value : ""
+        }
+        onValueChange={(value) => {
+          if (value) field.handleChange({ kind: "preset", value });
         }}
       >
         {TREADS_CONFIG[design].options.map((tread_num) => (
@@ -44,7 +46,12 @@ const FormNumberOfTreads = ({ design }: Props) => {
           placeholder="Custom"
           className="placeholder:text-center text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
           onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.value)}
+          onChange={(e) =>
+            field.handleChange({ kind: "custom", value: e.target.value })
+          }
+          value={
+            field.state.value.kind === "custom" ? field.state.value.value : ""
+          }
           maxLength={2}
         />
         {isInvalid && (

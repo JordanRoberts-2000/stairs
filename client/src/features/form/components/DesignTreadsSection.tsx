@@ -10,10 +10,10 @@ const DesignTreadsSection = withForm({
           name="design"
           listeners={{
             onChange: ({ value }) => {
-              form.setFieldValue(
-                "treads",
-                TREADS_CONFIG[value].default.toString()
-              );
+              form.setFieldValue("treads", {
+                kind: "preset",
+                value: TREADS_CONFIG[value].default.toString(),
+              });
             },
           }}
         >

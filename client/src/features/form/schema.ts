@@ -15,6 +15,23 @@ const FormInputNumber = (
     : baseSchema;
 };
 
+const treadSchema = z
+  .discriminatedUnion("kind", [
+    z.object({
+      kind: z.literal("preset"),
+      value: FormInputNumber((n) =>
+        n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
+      ),
+    }),
+    z.object({
+      kind: z.literal("custom"),
+      value: FormInputNumber((n) =>
+        n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
+      ),
+    }),
+  ])
+  .transform((v) => v.value);
+
 export const formSchema = z.object({
   customer: z.string().nonempty("Required"),
   site: z.string().nonempty("Required"),
@@ -23,9 +40,7 @@ export const formSchema = z.object({
     n.min(700, "Width too small").max(1500, "Width too large")
   ),
   design: z.enum(DESIGNS),
-  treads: FormInputNumber((n) =>
-    n.min(1, "Invalid tread number").max(20, "Tread limit exceeded")
-  ),
+  treads: treadSchema,
 });
 
 export type FormSchema = z.infer<typeof formSchema>;

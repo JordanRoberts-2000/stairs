@@ -17,6 +17,9 @@ const FormInput = ({}) => {
         className="border-2 border-cyan-800 text-lg shadow-md rounded-[8px] size-fit px-3 py-2"
         id={field.name}
         aria-invalid={isInvalid}
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
         name={field.name}
         onBlur={field.handleBlur}
         value={field.state.value}

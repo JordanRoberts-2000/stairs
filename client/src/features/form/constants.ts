@@ -14,5 +14,8 @@ export const FORM_DEFAULTS = {
   plot: "",
   wos: "",
   design: "straight",
-  treads: TREADS_CONFIG["straight"].default.toString(),
+  treads: {
+    kind: "preset",
+    value: TREADS_CONFIG["straight"].default.toString(),
+  },
 } satisfies FormSchemaInput as FormSchemaInput;
