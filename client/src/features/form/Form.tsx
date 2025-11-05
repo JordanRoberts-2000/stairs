@@ -25,7 +25,7 @@ const Form = ({}) => {
 
   return (
     <form
-      className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20"
+      className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20 bg-background"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
@@ -37,10 +37,10 @@ const Form = ({}) => {
         </form.AppField>
         <form.AppField name="site">{(field) => <field.Input />}</form.AppField>
         <form.AppField name="plot">
-          {(field) => <field.Input inputMode="numeric" />}
+          {(field) => <field.Input inputMode="numeric" maxLength={3} />}
         </form.AppField>
         <form.AppField name="wos">
-          {(field) => <field.Input inputMode="numeric" />}
+          {(field) => <field.Input inputMode="numeric" maxLength={4} />}
         </form.AppField>
       </div>
       <DesignTreadsSection form={form} />

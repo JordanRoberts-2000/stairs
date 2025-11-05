@@ -2,8 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { FormSchema } from "./features/form/schema";
 
+type StoredEntry = FormSchema & {
+  timestamp: string;
+};
+
 type Store = {
-  entries: FormSchema[];
+  entries: StoredEntry[];
   actions: StoreActions;
 };
 
@@ -18,7 +22,12 @@ const useStore = create<Store>()(
       entries: [],
       actions: {
         addEntry: (entry: FormSchema) =>
-          set((state) => ({ entries: [...state.entries, entry] })),
+          set((state) => ({
+            entries: [
+              ...state.entries,
+              { ...entry, timestamp: new Date().toISOString() },
+            ],
+          })),
         clearEntries: () => {
           set({ entries: [] });
         },

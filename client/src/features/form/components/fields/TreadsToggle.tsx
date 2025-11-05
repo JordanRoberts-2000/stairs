@@ -44,6 +44,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
         ))}
         <Input
           placeholder="Custom"
+          inputMode="numeric"
           className="placeholder:text-center text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
           onBlur={field.handleBlur}
           onChange={(e) =>
