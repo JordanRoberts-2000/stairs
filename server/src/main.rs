@@ -42,7 +42,7 @@ fn create_app(cfg: &AppConfig) -> Result<Router> {
 
     Ok(Router::new()
         .route("/health", get(health_check))
-        .fallback_service(ServeDir::new("dist"))
+        .fallback_service(ServeDir::new("public"))
         .layer(protection_middleware)
         .layer(TraceLayer::new_for_http()))
 }

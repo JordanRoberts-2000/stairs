@@ -15,11 +15,6 @@ export default defineConfig({
       },
     }),
   ],
-  build: {
-    outDir: resolve(__dirname, "../server/dist"),
-    emptyOutDir: true,
-    assetsDir: "assets",
-  },
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
