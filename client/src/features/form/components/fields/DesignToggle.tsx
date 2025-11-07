@@ -9,6 +9,7 @@ import StraightIcon from "@/assets/design/straight.svg?react";
 import WinderIcon from "@/assets/design/winder.svg?react";
 import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
 import { DESIGNS } from "../../constants";
+import { flushSync } from "react-dom";
 
 const DesignToggle = () => {
   const field = useFieldContext<FormSchemaInput["design"]>();
@@ -30,7 +31,11 @@ const DesignToggle = () => {
         className="w-full *:flex-1 *:border-2 *:border-primary *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
         value={field.state.value}
         onValueChange={(val) => {
-          if (isDesign(val)) field.handleChange(val);
+          document.startViewTransition(() => {
+            flushSync(() => {
+              if (isDesign(val)) field.handleChange(val);
+            });
+          });
         }}
       >
         <ToggleGroupItem value="straight" className="font-black! text-xs!">

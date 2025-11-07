@@ -33,9 +33,10 @@ const FormNumberOfTreads = ({ design }: Props) => {
           if (value) field.handleChange({ kind: "preset", value });
         }}
       >
-        {TREADS_CONFIG[design].options.map((tread_num) => (
+        {TREADS_CONFIG[design].options.map((tread_num, i) => (
           <ToggleGroupItem
             key={tread_num}
+            style={{ viewTransitionName: `tread-${i}` }}
             value={tread_num.toString()}
             className="font-black flex-1 border-2 shadow-md! rounded-[4px]! border-primary py-6"
           >
@@ -44,6 +45,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
         ))}
         <Input
           placeholder="Custom"
+          style={{ viewTransitionName: "treads" }}
           inputMode="numeric"
           className="placeholder:text-center text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
           onBlur={field.handleBlur}
