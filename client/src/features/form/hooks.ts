@@ -3,7 +3,8 @@ import FormInput from "./components/fields/FormInput";
 import { DesignToggle } from "./components/fields/DesignToggle";
 import FormNumberOfTreads from "./components/fields/TreadsToggle";
 
-const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
+const { fieldContext, formContext, useFieldContext, useFormContext } =
+  createFormHookContexts();
 
 const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
@@ -16,4 +17,4 @@ const { useAppForm, withForm } = createFormHook({
   formContext,
 });
 
-export { useAppForm, useFieldContext, withForm };
+export { useAppForm, useFieldContext, withForm, useFormContext };

@@ -1,6 +1,123 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ::view-transition-group(treads),
+::view-transition-new(treads),
+::view-transition-old(treads) {
+  animation-duration: 2000ms; 
+  animation-timing-function: ease;
+} */
+
+::view-transition-old(tread-1),
+::view-transition-new(tread-1) {
+  height: fit-content;
+}
+
+::view-transition-old(tread-2),
+::view-transition-new(tread-2) {
+  height: fit-content;
+}
+
+::view-transition-old(tread-3),
+::view-transition-new(tread-3) {
+  height: fit-content;
+}
+
+::view-transition-old(tread-0),
+::view-transition-new(tread-0) {
+  height: fit-content;
+}
+
+::view-transition-group(tread-0-num) {
+  animation-duration: 300ms;
+  /* animation-delay: 500ms; */
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+::view-transition-old(tread-0-num) {
+  animation-name: vt-slide-up-fade;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-new(tread-0-num) {
+  animation-name: vt-rise-in;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-old(tread-1-num) {
+  animation-name: vt-slide-up-fade;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-new(tread-1-num) {
+  animation-name: vt-rise-in;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-old(tread-2-num) {
+  animation-name: vt-slide-up-fade;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-new(tread-2-num) {
+  animation-name: vt-rise-in;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-old(tread-3-num) {
+  animation-name: vt-slide-up-fade;
+  height: 100%;
+  object-fit: none;
+}
+
+::view-transition-new(tread-3-num) {
+  animation-name: vt-rise-in;
+  height: 100%;
+  object-fit: none;
+}
+
+@keyframes vt-slide-up-fade {
+  from {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-35%);
+  }
+}
+
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateX(35%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+::view-transition-old(treads),
+::view-transition-new(treads) {
+  height: fit-content;
+}
+
+::view-transition-old(treads-ph),
+::view-transition-new(treads-ph) {
+  /* Break aspect ratio at an element level */
+  height: 100%;
+  /* But maintain it within the image itself */
+  object-fit: none;
+  /* animation-duration: 1000ms; */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

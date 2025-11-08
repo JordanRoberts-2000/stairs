@@ -36,27 +36,41 @@ const FormNumberOfTreads = ({ design }: Props) => {
         {TREADS_CONFIG[design].options.map((tread_num, i) => (
           <ToggleGroupItem
             key={tread_num}
-            style={{ viewTransitionName: `tread-${i}` }}
             value={tread_num.toString()}
-            className="font-black flex-1 border-2 shadow-md! rounded-[4px]! border-primary py-6"
+            style={{ viewTransitionName: `tread-${i}` }}
+            className="font-black flex-1 border-2 shadow-md! rounded-[4px]! border-cyan-800 py-6"
           >
-            {tread_num}
+            <div style={{ viewTransitionName: `tread-${i}-num` }}>
+              {tread_num}
+            </div>
           </ToggleGroupItem>
         ))}
-        <Input
-          placeholder="Custom"
+        <div
+          className="relative  text-center h-12 font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
           style={{ viewTransitionName: "treads" }}
-          inputMode="numeric"
-          className="placeholder:text-center text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
-          onBlur={field.handleBlur}
-          onChange={(e) =>
-            field.handleChange({ kind: "custom", value: e.target.value })
-          }
-          value={
-            field.state.value.kind === "custom" ? field.state.value.value : ""
-          }
-          maxLength={2}
-        />
+        >
+          <Input
+            inputMode="numeric"
+            className="peer border-none shadow-none"
+            placeholder=" "
+            onBlur={field.handleBlur}
+            onChange={(e) =>
+              field.handleChange({ kind: "custom", value: e.target.value })
+            }
+            value={
+              field.state.value.kind === "custom" ? field.state.value.value : ""
+            }
+            maxLength={2}
+          />
+          <span
+            aria-hidden
+            style={{ viewTransitionName: "treads-ph" }}
+            className="pointer-events-none absolute inset-0 grid place-items-center peer-not-placeholder-shown:opacity-0"
+          >
+            Custom
+          </span>
+        </div>
+
         {isInvalid && (
           <FieldError
             errors={field.state.meta.errors}

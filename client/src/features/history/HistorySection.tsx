@@ -1,13 +1,6 @@
 import DesignIcon from "@/components/DesignIcon";
 import { useEntries } from "@/store";
-
-const formatTime = (timestamp: string) => {
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  }).format(new Date(timestamp));
-};
+import { formatTime } from "@/utils/formatTime";
 
 const HistorySection = () => {
   const entries = useEntries();
@@ -47,7 +40,7 @@ const HistorySection = () => {
                 <div className="text-gray-500">{entry.site}</div>
               </div>
               <div className="text-xs flex font-mono gap-4 mt-1">
-                <div className="bg-emerald-100 text-emerald-700 px-2 py-1">
+                <div className="bg-sky-100 text-bg-sky-700 px-2 py-1">
                   Treads: {entry.treads}
                 </div>
                 <div className="bg-purple-100 text-purple-700 px-2 py-1">

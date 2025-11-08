@@ -5,7 +5,7 @@ const DesignTreadsSection = withForm({
   defaultValues: FORM_DEFAULTS,
   render: ({ form }) => {
     return (
-      <div className="space-y-8 border-y border-black py-4">
+      <div className="space-y-8 border-y-2 border-neutral-800 py-4">
         <form.AppField
           name="design"
           listeners={{

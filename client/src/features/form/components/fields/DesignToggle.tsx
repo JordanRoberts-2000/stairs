@@ -28,7 +28,7 @@ const DesignToggle = () => {
       </FieldLabel>
       <ToggleGroup
         type="single"
-        className="w-full *:flex-1 *:border-2 *:border-primary *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
+        className="w-full *:flex-1 *:border-2 *:border-cyan-800 *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
         value={field.state.value}
         onValueChange={(val) => {
           document.startViewTransition(() => {

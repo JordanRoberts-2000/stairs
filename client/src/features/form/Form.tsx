@@ -5,6 +5,7 @@ import { FORM_DEFAULTS } from "./constants";
 import { formSchema } from "./schema";
 import { useActions } from "@/store";
 import { toast } from "sonner";
+import { DevTools } from "../devTools/DevToolsDialog";
 
 const Form = ({}) => {
   const { addEntry } = useActions();
@@ -24,30 +25,49 @@ const Form = ({}) => {
   });
 
   return (
-    <form
-      className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20 bg-background"
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-    >
-      <div className="space-y-10 mb-8">
-        <form.AppField name="customer">
-          {(field) => <field.Input />}
-        </form.AppField>
-        <form.AppField name="site">{(field) => <field.Input />}</form.AppField>
-        <form.AppField name="plot">
-          {(field) => <field.Input inputMode="numeric" maxLength={3} />}
-        </form.AppField>
-        <form.AppField name="wos">
-          {(field) => <field.Input inputMode="numeric" maxLength={4} />}
-        </form.AppField>
-      </div>
-      <DesignTreadsSection form={form} />
-      <Button className="mt-8 mx-auto font-mono bg-neutral-800 size-fit text-2xl py-3 px-24 rounded-[8px]">
-        Submit
-      </Button>
-    </form>
+    <>
+      <form
+        className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20 bg-background"
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+      >
+        <div className="space-y-10 mb-8">
+          <form.AppField name="customer">
+            {(field) => <field.Input />}
+          </form.AppField>
+          <form.AppField name="site">
+            {(field) => <field.Input />}
+          </form.AppField>
+          <div className="flex gap-4">
+            <form.AppField name="plot">
+              {(field) => (
+                <field.Input
+                  inputMode="numeric"
+                  className="flex-2"
+                  maxLength={3}
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="wos">
+              {(field) => (
+                <field.Input
+                  inputMode="numeric"
+                  className="flex-1"
+                  maxLength={4}
+                />
+              )}
+            </form.AppField>
+          </div>
+        </div>
+        <DesignTreadsSection form={form} />
+        <Button className="mt-8 mx-auto font-mono bg-neutral-800 size-fit text-2xl py-3 px-24 rounded-[8px]">
+          Submit
+        </Button>
+      </form>
+      {import.meta.env.DEV && <DevTools form={form} />}
+    </>
   );
 };
 
