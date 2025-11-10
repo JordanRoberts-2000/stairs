@@ -19,3 +19,8 @@ export const FORM_DEFAULTS = {
     value: TREADS_CONFIG["straight"].default.toString(),
   },
 } satisfies FormSchemaInput as FormSchemaInput;
+
+export const OPERATORS = new Set(["jordan", "sadman"]);
+export const BENCH_NUMBERS = new Set(
+  Array.from({ length: 12 }, (_, i) => i + 1)
+);

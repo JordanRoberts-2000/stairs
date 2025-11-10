@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui";
 import { useAppForm } from "@/features/form/hooks";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
-import { FORM_DEFAULTS } from "./constants";
+import { FORM_DEFAULTS } from "../../constants";
 import { formSchema } from "./schema";
-import { useActions } from "@/store";
+import { useActions, useSession } from "@/store";
 import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
 
 const Form = ({}) => {
-  const { addEntry } = useActions();
+  const { addHistoryEntry } = useActions();
+  const { operator, bench } = useSession();
 
   const form = useAppForm({
     defaultValues: FORM_DEFAULTS,
@@ -16,10 +17,18 @@ const Form = ({}) => {
       onSubmit: formSchema,
     },
     onSubmit: ({ value, formApi }) => {
+      if (!operator) {
+        toast.error(`No user selected`);
+        return;
+      }
+      if (!bench) {
+        toast.error(`No bench selected`);
+        return;
+      }
       const entry = formSchema.parse(value);
-      addEntry(entry);
+      addHistoryEntry(entry);
       formApi.reset();
-      toast.success(`submitted successfully`);
+      toast.success(`Submitted successfully`);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
   });

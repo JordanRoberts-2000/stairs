@@ -6,15 +6,13 @@ import {
 import DevToolIcon from "@/assets/devtools.svg?react";
 import { Button } from "@/components/ui";
 import ViewStorageDialog from "./ViewStorage";
-import { useActions } from "@/store";
 import { useSeedEntries } from "./useSeedEntries";
-import { useFormContext, withForm } from "../form/hooks";
-import { FORM_DEFAULTS } from "../form/constants";
+import { withForm } from "../form/hooks";
+import { FORM_DEFAULTS } from "../../constants";
 
 const DevTools = withForm({
   defaultValues: FORM_DEFAULTS,
   render: ({ form }) => {
-    const { clearEntries } = useActions();
     const { seedEntries } = useSeedEntries();
 
     return (
@@ -47,7 +45,10 @@ const DevTools = withForm({
           </Button>
           <Button
             className="rounded-[8px] bg-gray-300 text-gray-900 font-semibold font-mono"
-            onClick={clearEntries}
+            onClick={() => {
+              localStorage.removeItem("store");
+              window.location.reload();
+            }}
           >
             Clear LocalStorage
           </Button>

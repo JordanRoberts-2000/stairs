@@ -1,12 +1,12 @@
 import { useActions } from "@/store";
-import { DESIGNS } from "../form/constants";
+import { DESIGNS } from "../../constants";
 import { useCallback } from "react";
 
 const SEED_AMOUNT = 4;
 
 export function useSeedEntries() {
   const pick = <T>(a: readonly T[]) => a[Math.floor(Math.random() * a.length)];
-  const { addEntry } = useActions();
+  const { addHistoryEntry } = useActions();
 
   const seedEntries = useCallback(() => {
     const entries = Array.from({ length: SEED_AMOUNT }, (_, i) => ({
@@ -19,9 +19,9 @@ export function useSeedEntries() {
     }));
 
     for (const entry of entries) {
-      addEntry(entry);
+      addHistoryEntry(entry);
     }
-  }, [addEntry]);
+  }, [addHistoryEntry]);
 
   return { seedEntries };
 }

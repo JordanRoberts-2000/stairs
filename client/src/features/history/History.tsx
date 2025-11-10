@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import MenuIcon from "@/assets/menu.svg?react";
-import SettingsIcon from "@/assets/settings.svg?react";
 import {
   Sheet,
   SheetClose,
@@ -12,16 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import HistorySection from "./HistorySection";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import SettingsDialog from "../settings/SettingsDialog";
 
 export function History() {
   return (
@@ -53,35 +43,7 @@ export function History() {
               Close
             </Button>
           </SheetClose>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-neutral-800 rounded-[8px]">
-                <SettingsIcon className="size-7 stroke-1" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
-                <DialogDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
-                </DialogDescription>
-              </DialogHeader>
-              <ul>
-                <li>clear history</li>
-                <li>turn off autoclear history??</li>
-                <li>set target</li>
-                <li>bench number</li>
-                <li>dark mode</li>
-              </ul>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <SettingsDialog />
         </SheetFooter>
       </SheetContent>
     </Sheet>

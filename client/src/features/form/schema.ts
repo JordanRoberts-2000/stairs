@@ -1,5 +1,5 @@
 import z from "zod";
-import { DESIGNS } from "./constants";
+import { DESIGNS } from "../../constants";
 
 const FormInputNumber = (
   additionalValidations?: (schema: z.ZodNumber) => z.ZodNumber

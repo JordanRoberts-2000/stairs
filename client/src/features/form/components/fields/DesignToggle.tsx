@@ -8,7 +8,7 @@ import { useFieldContext } from "../../hooks";
 import StraightIcon from "@/assets/design/straight.svg?react";
 import WinderIcon from "@/assets/design/winder.svg?react";
 import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
-import { DESIGNS } from "../../constants";
+import { DESIGNS } from "../../../../constants";
 import { flushSync } from "react-dom";
 
 const DesignToggle = () => {

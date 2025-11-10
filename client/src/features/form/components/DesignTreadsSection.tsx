@@ -1,4 +1,4 @@
-import { FORM_DEFAULTS, TREADS_CONFIG } from "../constants";
+import { FORM_DEFAULTS, TREADS_CONFIG } from "../../../constants";
 import { withForm } from "../hooks";
 
 const DesignTreadsSection = withForm({

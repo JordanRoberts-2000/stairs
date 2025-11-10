@@ -7,7 +7,7 @@ import {
   ToggleGroupItem,
 } from "@/components/ui";
 import { useFieldContext } from "@/features/form/hooks";
-import { TREADS_CONFIG } from "@/features/form/constants";
+import { TREADS_CONFIG } from "@/constants";
 import type { FormSchemaInput } from "@/features/form/schema";
 
 type Props = {

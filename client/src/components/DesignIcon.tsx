@@ -1,7 +1,7 @@
 import StraightIcon from "@/assets/design/straight.svg?react";
 import WinderIcon from "@/assets/design/winder.svg?react";
 import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
-import type { DESIGNS } from "@/features/form/constants";
+import type { DESIGNS } from "@/constants";
 import { cn } from "@/lib/utils";
 
 type Design = (typeof DESIGNS)[number];

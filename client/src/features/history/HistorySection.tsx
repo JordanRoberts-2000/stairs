@@ -1,9 +1,9 @@
 import DesignIcon from "@/components/DesignIcon";
-import { useEntries } from "@/store";
+import { useUserHistory } from "@/store";
 import { formatTime } from "@/utils/formatTime";
 
 const HistorySection = () => {
-  const entries = useEntries();
+  const entries = useUserHistory();
   const hasEntries = entries && entries.length > 0;
 
   return (
