@@ -21,10 +21,13 @@ type StoreContext = {
 type StoreActions = {
   addHistoryEntry: (entry: FormSchema) => void;
   setOperator: (operator: string) => void;
-  setBench: (bench: number) => void;
-  setTarget: (target: number) => void;
+  setBench: (bench: number) => { error: null | string };
+  setTarget: (target: number) => { error: null | string };
+  setDarkMode: (darkMode: boolean) => { error: null | string };
+  setAutoClearHistory: (autoClearHistory: boolean) => { error: null | string };
   clearHistory: () => void;
   clearUserHistory: () => void;
+  validateSession: () => string | null;
 };
 
 type Store = {
@@ -41,7 +44,7 @@ const DEFAULT_USER_STATE: OperatorProfile = {
 
 const useStore = create<Store>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       context: {
         session: { operator: undefined, bench: undefined },
         profiles: {},
@@ -72,41 +75,76 @@ const useStore = create<Store>()(
           }),
 
         setOperator: (operator: string) =>
-          set((state) => ({
-            context: {
-              ...state.context,
-              session: { ...state.context.session, operator },
-            },
-          })),
+          set((state) => {
+            const hasProfile = !!state.context.profiles[operator];
 
-        setBench: (bench: number) =>
+            const profiles = hasProfile
+              ? state.context.profiles
+              : {
+                  ...state.context.profiles,
+                  [operator]: { ...DEFAULT_USER_STATE },
+                };
+
+            return {
+              context: {
+                ...state.context,
+                session: { ...state.context.session, operator },
+                profiles,
+              },
+            };
+          }),
+
+        setBench: (bench: number) => {
+          const { operator } = get().context.session;
+          if (!operator) return { error: "No operator selected" };
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return { error: "Profile not found" };
+
           set((state) => ({
             context: {
               ...state.context,
               session: { ...state.context.session, bench },
             },
-          })),
+          }));
+          return { error: null };
+        },
 
-        setTarget: (target: number) =>
-          set((state) => {
-            const { operator } = state.context.session;
-            if (!operator) return state;
+        validateSession: () => {
+          const session = get().context.session;
 
-            const current = state.context.profiles[operator] ?? {
-              ...DEFAULT_USER_STATE,
-            };
-            return {
-              context: {
-                ...state.context,
-                profiles: {
-                  ...state.context.profiles,
-                  [operator]: { ...current, target },
-                },
+          if (!session.operator) return "No user selected";
+          if (!session.bench) return "No bench number selected";
+          return null;
+        },
+
+        setTarget: (target: number) => {
+          const { operator } = get().context.session;
+          if (!operator) return { error: "No operator selected" };
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return { error: "Profile not found" };
+
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: { ...profile, target },
               },
-            };
-          }),
+            },
+          }));
 
-        setDarkMode: (darkMode: boolean) =>
+          return { error: null };
+        },
+
+        setDarkMode: (darkMode: boolean) => {
+          const { operator } = get().context.session;
+          if (!operator) return { error: "No operator selected" };
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return { error: "Profile not found" };
+
           set((state) => {
             const { operator } = state.context.session;
             if (!operator) return state;
@@ -123,9 +161,17 @@ const useStore = create<Store>()(
                 },
               },
             };
-          }),
+          });
+          return { error: null };
+        },
 
-        setAutoClearHistory: (autoClearHistory: boolean) =>
+        setAutoClearHistory: (autoClearHistory: boolean) => {
+          const { operator } = get().context.session;
+          if (!operator) return { error: "No operator selected" };
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return { error: "Profile not found" };
+
           set((state) => {
             const { operator } = state.context.session;
             if (!operator) return state;
@@ -142,7 +188,9 @@ const useStore = create<Store>()(
                 },
               },
             };
-          }),
+          });
+          return { error: null };
+        },
 
         clearHistory: () =>
           set((state) => ({
@@ -174,9 +222,20 @@ export const useUserHistory = () => {
 
 export const useUserTarget = () => {
   const { operator } = useStore((state) => state.context.session);
-
   const history = useStore((state) => state.context.profiles);
-  return operator ? history[operator]?.target : undefined;
+  const { setOperator } = useActions();
+
+  if (!operator) {
+    return 14;
+  }
+
+  const current = history[operator];
+  if (!current) {
+    setOperator(operator);
+    return DEFAULT_USER_STATE.target;
+  }
+
+  return current.target;
 };
 
 export const useUserDarkMode = () => {
