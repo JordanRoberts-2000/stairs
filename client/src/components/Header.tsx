@@ -10,17 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import TargetCounter from "@/features/TargetCounter";
+import SessionToggles from "@/features/SessionToggles";
 
 const Header = ({}) => {
-  const user_history = useUserHistory();
-  const count = user_history ? user_history.length : 0;
-  const { setBench, setOperator } = useActions();
-  const { operator, bench } = useSession();
-  const target = useUserTarget() ?? 14;
-
   return (
     <header className="flex flex-col shadow-md px-3 py-2 mb-4 bg-neutral-800 rounded-2xl mx-2 text-white! z-50 sticky top-2">
       <div className="bg-gradient-to-b from-white to-transparent h-4 inset-x-0 translate-y-full absolute bottom-0"></div>
+      <SessionToggles />
       <div className="flex pt-2">
         <div className="text-3xl mx-auto font-mono tracking-tighter translate-y-2 p-1 flex items-center">
           <div className="mr-2 gap-1  flex items-center">
@@ -41,45 +38,9 @@ const Header = ({}) => {
             Assembly
           </div>
         </div>
-        <Select value={operator} onValueChange={(value) => setOperator(value)}>
-          <SelectTrigger className="absolute border-none text-xs top-2 left-1 flex gap-2 p-1 rounded-[8px] px-2 font-semibold font-mono">
-            <Profile className="size-5 fill-white" />
-            <SelectValue placeholder="User" className="text-white" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="jordan">Jordan</SelectItem>
-            <SelectItem value="sadman">Sadman</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
-          value={bench == undefined ? undefined : String(bench)}
-          onValueChange={(value) => setBench(Number(value))}
-        >
-          <SelectTrigger className="absolute border-none text-xs top-9 left-1 flex gap-2 p-1 rounded-[8px] px-2 font-semibold font-mono">
-            <Desk className="size-5 text-white" />
-            <SelectValue placeholder="Bench" className="text-white" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="3">3</SelectItem>
-            <SelectItem value="2">2</SelectItem>
-          </SelectContent>
-        </Select>
-
         <History />
       </div>
-      <div className="ml-auto text-xs font-bold px-2 py-1">
-        {count} / {target}
-      </div>
-      <div className="h-[6px] flex mb-2 mt-2 gap-1 rounded-xl">
-        {Array.from({ length: target }, (_, i) => (
-          <div
-            key={`bar-${i}`}
-            className={`flex-1 border rounded-4xl shadow  ${
-              i < count ? "bg-cyan-600 " : ""
-            }`}
-          />
-        ))}
-      </div>
+      <TargetCounter />
     </header>
   );
 };

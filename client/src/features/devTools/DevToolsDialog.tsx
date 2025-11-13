@@ -16,7 +16,7 @@ const DevTools = withForm({
     const { seedEntries } = useSeedEntries();
 
     return (
-      <Popover>
+      <Popover modal={true}>
         <PopoverTrigger className="fixed bottom-0 left-0 bg-neutral-800 rounded-[8px] p-2 m-4">
           <DevToolIcon className="text-white size-6" />
         </PopoverTrigger>

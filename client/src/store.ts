@@ -213,12 +213,14 @@ const useStore = create<Store>()(
 
 export const useSession = () => useStore((state) => state.context.session);
 
-export const useUserHistory = () => {
-  const { operator } = useStore((state) => state.context.session);
-
-  const history = useStore((state) => state.context.profiles);
-  return operator ? history[operator]?.history : [];
-};
+const EMPTY_HISTORY: Entry[] = [];
+export const useUserHistory = (): Entry[] =>
+  useStore((state) => {
+    const op = state.context.session.operator;
+    return op
+      ? state.context.profiles[op]?.history ?? EMPTY_HISTORY
+      : EMPTY_HISTORY;
+  });
 
 export const useUserTarget = () => {
   const { operator } = useStore((state) => state.context.session);

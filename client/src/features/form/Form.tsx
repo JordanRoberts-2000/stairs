@@ -6,6 +6,9 @@ import { formSchema } from "./schema";
 import { useActions } from "@/store";
 import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import OneTwoCheckbox from "./components/fields/OneTwoCheckbox";
 
 const Form = ({}) => {
   const { addHistoryEntry, validateSession } = useActions();
@@ -46,15 +49,18 @@ const Form = ({}) => {
             {(field) => <field.Input />}
           </form.AppField>
           <div className="flex gap-4">
-            <form.AppField name="plot">
-              {(field) => (
-                <field.Input
-                  inputMode="numeric"
-                  className="flex-2"
-                  maxLength={3}
-                />
-              )}
-            </form.AppField>
+            <div className="relative flex-2">
+              <OneTwoCheckbox />
+              <form.AppField name="plot">
+                {(field) => (
+                  <field.Input
+                    inputMode="numeric"
+                    className="w-full"
+                    maxLength={3}
+                  />
+                )}
+              </form.AppField>
+            </div>
             <form.AppField name="wos">
               {(field) => (
                 <field.Input

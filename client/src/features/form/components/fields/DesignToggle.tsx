@@ -31,11 +31,12 @@ const DesignToggle = () => {
         className="w-full *:flex-1 *:border-2 *:border-cyan-800 *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
         value={field.state.value}
         onValueChange={(val) => {
-          document.startViewTransition(() => {
-            flushSync(() => {
-              if (isDesign(val)) field.handleChange(val);
+          if (val !== field.state.value && isDesign(val))
+            document.startViewTransition(() => {
+              flushSync(() => {
+                field.handleChange(val);
+              });
             });
-          });
         }}
       >
         <ToggleGroupItem value="straight" className="font-black! text-xs!">
