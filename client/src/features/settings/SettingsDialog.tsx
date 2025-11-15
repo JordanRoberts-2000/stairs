@@ -13,9 +13,8 @@ import { Label } from "@/components/ui/label";
 import { useActions, useSession, useUserTarget } from "@/store";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
-import { FormInputNumber } from "../form/schema";
+import { FormInputNumber } from "@/utils/formInputNumber";
 
 const targetSchema = FormInputNumber((n) =>
   n

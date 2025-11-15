@@ -1,4 +1,4 @@
-import type { FormSchemaInput } from "@/features/form/schema";
+import type { AssemblySchemaInput } from "./features/assemblyForm/schema";
 
 export const DESIGNS = ["straight", "winder", "doubleWinder"] as const;
 
@@ -13,12 +13,13 @@ export const FORM_DEFAULTS = {
   site: "",
   plot: "",
   wos: "",
+  isOneTwo: false,
   design: "straight",
   treads: {
     kind: "preset",
     value: TREADS_CONFIG["straight"].default.toString(),
   },
-} satisfies FormSchemaInput as FormSchemaInput;
+} satisfies AssemblySchemaInput as AssemblySchemaInput;
 
 export const OPERATORS = new Set(["jordan", "sadman"]);
 export const BENCH_NUMBERS = new Set(

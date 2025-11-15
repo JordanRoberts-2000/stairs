@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { FormSchema } from "./features/form/schema";
+import type { AssemblySchema } from "./features/assemblyForm/schema";
 
-type Entry = FormSchema & {
+type Entry = AssemblySchema & {
   timestamp: string;
 };
 
@@ -19,7 +19,7 @@ type StoreContext = {
 };
 
 type StoreActions = {
-  addHistoryEntry: (entry: FormSchema) => void;
+  addHistoryEntry: (entry: AssemblySchema) => void;
   setOperator: (operator: string) => void;
   setBench: (bench: number) => { error: null | string };
   setTarget: (target: number) => { error: null | string };
@@ -50,7 +50,7 @@ const useStore = create<Store>()(
         profiles: {},
       },
       actions: {
-        addHistoryEntry: (entry: FormSchema) =>
+        addHistoryEntry: (entry: AssemblySchema) =>
           set((state) => {
             const { operator } = state.context.session;
             if (!operator) return state;

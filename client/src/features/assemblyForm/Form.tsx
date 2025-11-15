@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui";
-import { useAppForm } from "@/features/form/hooks";
+import { useAppForm } from "@/features/assemblyForm/hooks";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { FORM_DEFAULTS } from "../../constants";
-import { formSchema } from "./schema";
+import { assemblySchema } from "./schema";
 import { useActions } from "@/store";
 import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import OneTwoCheckbox from "./components/fields/OneTwoCheckbox";
 
 const Form = ({}) => {
@@ -16,7 +14,7 @@ const Form = ({}) => {
   const form = useAppForm({
     defaultValues: FORM_DEFAULTS,
     validators: {
-      onSubmit: formSchema,
+      onSubmit: assemblySchema,
     },
     onSubmit: ({ value, formApi }) => {
       const error = validateSession();
@@ -25,7 +23,7 @@ const Form = ({}) => {
         return;
       }
 
-      addHistoryEntry(formSchema.parse(value));
+      addHistoryEntry(assemblySchema.parse(value));
       formApi.reset();
       toast.success(`Submitted successfully`);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -50,7 +48,9 @@ const Form = ({}) => {
           </form.AppField>
           <div className="flex gap-4">
             <div className="relative flex-2">
-              <OneTwoCheckbox />
+              <form.AppField name="isOneTwo">
+                {(field) => <field.CheckBox />}
+              </form.AppField>
               <form.AppField name="plot">
                 {(field) => (
                   <field.Input

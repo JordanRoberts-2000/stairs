@@ -1,4 +1,4 @@
-import Form from "./features/form/Form";
+import Form from "./features/assemblyForm/Form";
 import Header from "./components/Header";
 import { Toaster } from "./components/ui/sonner";
 import { useEffect } from "react";

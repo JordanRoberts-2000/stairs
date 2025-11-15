@@ -6,16 +6,16 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui";
-import { useFieldContext } from "@/features/form/hooks";
+import { useFieldContext } from "@/features/assemblyForm/hooks";
 import { TREADS_CONFIG } from "@/constants";
-import type { FormSchemaInput } from "@/features/form/schema";
+import type { AssemblySchemaInput } from "@/features/assemblyForm/schema";
 
 type Props = {
-  design: FormSchemaInput["design"];
+  design: AssemblySchemaInput["design"];
 };
 
 const FormNumberOfTreads = ({ design }: Props) => {
-  const field = useFieldContext<FormSchemaInput["treads"]>();
+  const field = useFieldContext<AssemblySchemaInput["treads"]>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
   return (

@@ -12,7 +12,7 @@ export function useSeedEntries() {
     const entries = Array.from({ length: SEED_AMOUNT }, (_, i) => ({
       customer: ["Acme", "Birch", "Cedar", "Delta"][i % 4]!,
       site: ["North Yard", "South Yard", "Lot 3"][i % 3]!,
-      plot: 10 + i,
+      plot: `${10 + i}`,
       wos: 800 + (i % 6) * 25,
       design: pick(DESIGNS),
       treads: 11 + (i % 5),

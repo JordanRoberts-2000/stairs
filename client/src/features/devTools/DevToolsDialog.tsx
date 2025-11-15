@@ -7,7 +7,7 @@ import DevToolIcon from "@/assets/devtools.svg?react";
 import { Button } from "@/components/ui";
 import ViewStorageDialog from "./ViewStorage";
 import { useSeedEntries } from "./useSeedEntries";
-import { withForm } from "../form/hooks";
+import { withForm } from "../assemblyForm/hooks";
 import { FORM_DEFAULTS } from "../../constants";
 
 const DevTools = withForm({
