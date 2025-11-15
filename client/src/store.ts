@@ -1,33 +1,24 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AssemblySchema } from "./features/assemblyForm/schema";
-
-type Entry = AssemblySchema & {
-  timestamp: string;
-};
-
-type OperatorProfile = {
-  target: number;
-  history: Entry[];
-  autoClearHistory: boolean;
-  darkMode: boolean;
-};
+import type { OperatorProfile, Operator } from "./types";
+import { Result, ok, err } from "neverthrow";
 
 type StoreContext = {
-  session: { operator?: string; bench?: number };
-  profiles: Record<string, OperatorProfile>;
+  session: { operator?: Operator; bench?: number };
+  profiles: Partial<Record<Operator, OperatorProfile>>;
 };
 
 type StoreActions = {
-  addHistoryEntry: (entry: AssemblySchema) => void;
-  setOperator: (operator: string) => void;
-  setBench: (bench: number) => { error: null | string };
-  setTarget: (target: number) => { error: null | string };
-  setDarkMode: (darkMode: boolean) => { error: null | string };
-  setAutoClearHistory: (autoClearHistory: boolean) => { error: null | string };
-  clearHistory: () => void;
-  clearUserHistory: () => void;
-  validateSession: () => string | null;
+  addHistoryEntry: (entry: AssemblySchema) => Result<void, string>;
+  ensureProfile: (operator: Operator) => OperatorProfile;
+  setOperator: (operator: Operator) => void;
+  setBench: (bench: number) => Result<void, string>;
+  setTarget: (target: number) => Result<void, string>;
+  setDarkMode: (darkMode: boolean) => Result<void, string>;
+  setAutoClearHistory: (autoClearHistory: boolean) => Result<void, string>;
+  clearUserHistory: () => Result<void, string>;
+  validateSession: () => Result<void, string>;
 };
 
 type Store = {
@@ -35,9 +26,9 @@ type Store = {
   actions: StoreActions;
 };
 
-const DEFAULT_USER_STATE: OperatorProfile = {
+const DEFAULT_PROFILE: OperatorProfile = {
   target: 14,
-  autoClearHistory: false,
+  autoClearHistory: true,
   darkMode: false,
   history: [],
 };
@@ -50,56 +41,66 @@ const useStore = create<Store>()(
         profiles: {},
       },
       actions: {
-        addHistoryEntry: (entry: AssemblySchema) =>
-          set((state) => {
-            const { operator } = state.context.session;
-            if (!operator) return state;
+        addHistoryEntry: (entry: AssemblySchema) => {
+          const { operator } = get().context.session;
+          if (!operator) return err("No operator selected");
 
-            const newEntry = { ...entry, timestamp: new Date().toISOString() };
-            const current = state.context.profiles[operator] ?? {
-              ...DEFAULT_USER_STATE,
-            };
+          const newEntry = { ...entry, timestamp: new Date().toISOString() };
+          const current = get().context.profiles[operator] ?? DEFAULT_PROFILE;
 
-            return {
-              context: {
-                ...state.context,
-                profiles: {
-                  ...state.context.profiles,
-                  [operator]: {
-                    ...current,
-                    history: [...current.history, newEntry],
-                  },
+          if (current.history.length >= 100)
+            return err("History limit exceeded");
+
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: {
+                  ...current,
+                  history: [...current.history, newEntry],
                 },
               },
-            };
-          }),
+            },
+          }));
 
-        setOperator: (operator: string) =>
-          set((state) => {
-            const hasProfile = !!state.context.profiles[operator];
+          return ok(undefined);
+        },
 
-            const profiles = hasProfile
-              ? state.context.profiles
-              : {
-                  ...state.context.profiles,
-                  [operator]: { ...DEFAULT_USER_STATE },
-                };
+        ensureProfile: (operator) => {
+          const existing = get().context.profiles[operator];
+          if (existing) return existing;
 
-            return {
-              context: {
-                ...state.context,
-                session: { ...state.context.session, operator },
-                profiles,
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: DEFAULT_PROFILE,
               },
-            };
-          }),
+            },
+          }));
+
+          return DEFAULT_PROFILE;
+        },
+
+        setOperator: (operator: Operator) => {
+          get().actions.ensureProfile(operator);
+
+          set((state) => ({
+            context: {
+              ...state.context,
+              session: { ...state.context.session, operator },
+            },
+          }));
+        },
 
         setBench: (bench: number) => {
           const { operator } = get().context.session;
-          if (!operator) return { error: "No operator selected" };
+          if (!operator) return err("No operator selected");
 
           const profile = get().context.profiles[operator];
-          if (!profile) return { error: "Profile not found" };
+          if (!profile) return err("Profile not found");
 
           set((state) => ({
             context: {
@@ -107,23 +108,25 @@ const useStore = create<Store>()(
               session: { ...state.context.session, bench },
             },
           }));
-          return { error: null };
+
+          return ok(undefined);
         },
 
         validateSession: () => {
           const session = get().context.session;
 
-          if (!session.operator) return "No user selected";
-          if (!session.bench) return "No bench number selected";
-          return null;
+          if (!session.operator) return err("No operator selected");
+          if (!session.bench) return err("No bench number selected");
+
+          return ok(undefined);
         },
 
         setTarget: (target: number) => {
           const { operator } = get().context.session;
-          if (!operator) return { error: "No operator selected" };
+          if (!operator) return err("No operator selected");
 
           const profile = get().context.profiles[operator];
-          if (!profile) return { error: "Profile not found" };
+          if (!profile) return err("Profile not found");
 
           set((state) => ({
             context: {
@@ -135,76 +138,68 @@ const useStore = create<Store>()(
             },
           }));
 
-          return { error: null };
+          return ok(undefined);
         },
 
         setDarkMode: (darkMode: boolean) => {
           const { operator } = get().context.session;
-          if (!operator) return { error: "No operator selected" };
+          if (!operator) return err("No operator selected");
 
           const profile = get().context.profiles[operator];
-          if (!profile) return { error: "Profile not found" };
+          if (!profile) return err("Profile not found");
 
-          set((state) => {
-            const { operator } = state.context.session;
-            if (!operator) return state;
-
-            const current = state.context.profiles[operator] ?? {
-              ...DEFAULT_USER_STATE,
-            };
-            return {
-              context: {
-                ...state.context,
-                profiles: {
-                  ...state.context.profiles,
-                  [operator]: { ...current, darkMode },
-                },
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: { ...profile, darkMode },
               },
-            };
-          });
-          return { error: null };
+            },
+          }));
+
+          return ok(undefined);
         },
 
         setAutoClearHistory: (autoClearHistory: boolean) => {
           const { operator } = get().context.session;
-          if (!operator) return { error: "No operator selected" };
+          if (!operator) return err("No operator selected");
 
           const profile = get().context.profiles[operator];
-          if (!profile) return { error: "Profile not found" };
+          if (!profile) return err("Profile not found");
 
-          set((state) => {
-            const { operator } = state.context.session;
-            if (!operator) return state;
-
-            const current = state.context.profiles[operator] ?? {
-              ...DEFAULT_USER_STATE,
-            };
-            return {
-              context: {
-                ...state.context,
-                profiles: {
-                  ...state.context.profiles,
-                  [operator]: { ...current, autoClearHistory },
-                },
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: { ...profile, autoClearHistory },
               },
-            };
-          });
-          return { error: null };
+            },
+          }));
+
+          return ok(undefined);
         },
 
-        clearHistory: () =>
+        clearUserHistory: () => {
+          const { operator } = get().context.session;
+          if (!operator) return err("No operator selected");
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return err("Profile not found");
+
           set((state) => ({
-            context: { ...state.context, profiles: {} },
-          })),
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: { ...profile, history: [] },
+              },
+            },
+          }));
 
-        clearUserHistory: () =>
-          set((state) => {
-            const { operator } = state.context.session;
-            if (!operator) return state;
-
-            const { [operator]: _omit, ...rest } = state.context.profiles;
-            return { context: { ...state.context, profiles: rest } };
-          }),
+          return ok(undefined);
+        },
       },
     }),
     { name: "store", partialize: (s) => ({ context: s.context }) }
@@ -213,46 +208,23 @@ const useStore = create<Store>()(
 
 export const useSession = () => useStore((state) => state.context.session);
 
-const EMPTY_HISTORY: Entry[] = [];
-export const useUserHistory = (): Entry[] =>
-  useStore((state) => {
-    const op = state.context.session.operator;
-    return op
-      ? state.context.profiles[op]?.history ?? EMPTY_HISTORY
-      : EMPTY_HISTORY;
-  });
-
-export const useUserTarget = () => {
-  const { operator } = useStore((state) => state.context.session);
-  const history = useStore((state) => state.context.profiles);
-  const { setOperator } = useActions();
+export const useOperatorProfile = () => {
+  const { operator } = useSession();
+  const profiles = useStore((state) => state.context.profiles);
 
   if (!operator) {
-    return 14;
+    return null;
   }
 
-  const current = history[operator];
-  if (!current) {
-    setOperator(operator);
-    return DEFAULT_USER_STATE.target;
+  const profile = profiles[operator];
+
+  if (!profile) {
+    return null;
   }
 
-  return current.target;
-};
-
-export const useUserDarkMode = () => {
-  const { operator } = useStore((state) => state.context.session);
-
-  const history = useStore((state) => state.context.profiles);
-  return operator ? history[operator]?.darkMode : undefined;
-};
-
-export const useUserAutoClearHistory = () => {
-  const { operator } = useStore((state) => state.context.session);
-
-  const history = useStore((state) => state.context.profiles);
-  return operator ? history[operator]?.autoClearHistory : undefined;
+  return profile;
 };
 
 export const useActions = () => useStore((state) => state.actions);
+
 export { useStore };

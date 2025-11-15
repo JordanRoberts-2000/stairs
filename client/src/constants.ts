@@ -25,3 +25,5 @@ export const OPERATORS = new Set(["jordan", "sadman"]);
 export const BENCH_NUMBERS = new Set(
   Array.from({ length: 12 }, (_, i) => i + 1)
 );
+
+export const RESET_TIME = 9 * 60 * 60 * 1000;

@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import HistorySection from "./HistorySection";
-import SettingsDialog from "../settings/SettingsDialog";
+import SettingsButton from "../settings/SettingsButton";
 
 export function History() {
   return (
@@ -43,7 +43,7 @@ export function History() {
               Close
             </Button>
           </SheetClose>
-          <SettingsDialog />
+          <SettingsButton />
         </SheetFooter>
       </SheetContent>
     </Sheet>

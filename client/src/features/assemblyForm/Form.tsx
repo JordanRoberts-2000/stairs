@@ -17,9 +17,9 @@ const Form = ({}) => {
       onBlur: assemblySchema,
     },
     onSubmit: ({ value, formApi }) => {
-      const error = validateSession();
-      if (error) {
-        toast.error(error);
+      const result = validateSession();
+      if (result.isErr()) {
+        toast.error(result.error);
         return;
       }
 

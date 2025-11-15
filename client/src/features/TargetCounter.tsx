@@ -1,8 +1,11 @@
-import { useUserHistory, useUserTarget } from "@/store";
+import { useOperatorProfile } from "@/store";
+import { useEffect } from "react";
 
 const TargetCounter = ({}) => {
-  const count = useUserHistory().length;
-  const target = useUserTarget();
+  const profile = useOperatorProfile();
+
+  const count = profile?.history.length ?? 0;
+  const target = profile?.target ?? 14;
 
   return (
     <div className="flex flex-col">

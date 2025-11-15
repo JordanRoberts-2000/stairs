@@ -1,22 +1,11 @@
-import { useActions, useSession, useUserHistory, useUserTarget } from "@/store";
 import { History } from "../features/history/History";
-import Logo from "@/assets/basketball.svg?react";
-import Profile from "@/assets/profile.svg?react";
-import Desk from "@/assets/desk.svg?react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import TargetCounter from "@/features/TargetCounter";
 import SessionToggles from "@/features/SessionToggles";
 
 const Header = ({}) => {
   return (
     <header className="flex flex-col shadow-md px-3 py-2 mb-4 bg-neutral-800 rounded-2xl mx-2 text-white! z-50 sticky top-2">
-      <div className="bg-gradient-to-b from-white to-transparent h-4 inset-x-0 translate-y-full absolute bottom-0"></div>
+      <div className="bg-linear-to-b from-white to-transparent h-4 inset-x-0 translate-y-full absolute bottom-0"></div>
       <SessionToggles />
       <div className="flex pt-2">
         <div className="text-3xl mx-auto font-mono tracking-tighter translate-y-2 p-1 flex items-center">

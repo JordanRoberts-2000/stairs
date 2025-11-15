@@ -10,14 +10,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useClearHistoryCheck } from "@/utils/clearHistoryCheck";
+import { type Operator } from "@/types";
+import { useEffect } from "react";
+
+const OPERATOR_ARRAY: Operator[] = ["Jordan", "Sadman"];
 
 const SessionToggles = ({}) => {
   const { setBench, setOperator } = useActions();
   const { operator, bench } = useSession();
+  const clearHistoryCheck = useClearHistoryCheck();
+
+  useEffect(() => {
+    if (!operator) return;
+    clearHistoryCheck();
+  }, [operator, clearHistoryCheck]);
 
   return (
     <div className="absolute top-2 left-1 flex flex-col gap-2">
-      <Select value={operator} onValueChange={(value) => setOperator(value)}>
+      <Select
+        value={operator ?? ""}
+        onValueChange={(value: Operator) => {
+          setOperator(value);
+        }}
+      >
         <SelectTrigger className="border-none text-xs h-6! flex gap-2 rounded-[8px] px-2 font-semibold font-mono">
           <Profile className="size-5 fill-white" />
           <SelectValue placeholder="User" className="text-white" />
@@ -27,17 +43,20 @@ const SessionToggles = ({}) => {
             <SelectLabel className="text-xs font-mono text-center">
               Operator
             </SelectLabel>
-            <SelectItem value="jordan" className="text-sm rounded">
-              Jordan
-            </SelectItem>
-            <SelectItem value="sadman" className="text-sm rounded">
-              Sadman
-            </SelectItem>
+            {OPERATOR_ARRAY.map((operator) => (
+              <SelectItem
+                key={operator}
+                value={operator}
+                className="text-sm rounded"
+              >
+                {operator}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
       <Select
-        value={bench == undefined ? undefined : String(bench)}
+        value={bench == undefined ? "" : String(bench)}
         onValueChange={(value) => setBench(Number(value))}
       >
         <SelectTrigger className="border-none text-xs h-6! flex gap-2 rounded-[8px] px-2 font-semibold font-mono">

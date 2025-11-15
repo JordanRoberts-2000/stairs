@@ -1,25 +1,24 @@
 import DesignIcon from "@/components/DesignIcon";
-import { useUserHistory } from "@/store";
+import { useOperatorProfile } from "@/store";
 import { formatTime } from "@/utils/formatTime";
 
 const HistorySection = () => {
-  const entries = useUserHistory();
-  const hasEntries = entries && entries.length > 0;
+  const profile = useOperatorProfile();
 
   return (
     <div className="flex flex-col flex-1 min-h-0 relative">
       {/* top fade */}
-      <div className="absolute top-0 w-full h-8 z-10 bg-gradient-to-b from-white/95 to-transparent" />
+      <div className="absolute top-0 w-full h-8 z-10 bg-linear-to-b from-white/95 to-transparent" />
       {/* bottom fade */}
-      <div className="absolute bottom-0 w-full h-8 z-10 bg-gradient-to-t from-white to-transparent" />
+      <div className="absolute bottom-0 w-full h-8 z-10 bg-linear-to-t from-white to-transparent" />
 
       <div className="flex flex-1 min-h-0 overflow-y-auto flex-col px-2">
-        {!hasEntries ? (
+        {!profile || profile.history.length === 0 ? (
           <div className="my-2 border font-mono border-gray-200 shadow rounded-[8px] h-40 grid place-items-center">
             no entries
           </div>
         ) : (
-          [...entries].reverse().map((entry, i) => (
+          [...profile.history].reverse().map((entry, i) => (
             <div
               key={`${entry.customer}-${entry.plot}-${i}`}
               className="bg-background relative border-b flex font-serif flex-col gap-1 border-neutral-400 p-2 pt-4"
