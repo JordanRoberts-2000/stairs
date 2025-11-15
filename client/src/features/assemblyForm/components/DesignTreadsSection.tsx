@@ -14,6 +14,12 @@ const DesignTreadsSection = withForm({
                 kind: "preset",
                 value: TREADS_CONFIG[value].default.toString(),
               });
+
+              form.setFieldMeta("treads", (prev) => ({
+                ...prev,
+                errors: [],
+                errorMap: {},
+              }));
             },
           }}
         >

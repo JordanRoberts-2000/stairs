@@ -1,13 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* ::view-transition-group(treads),
-::view-transition-new(treads),
-::view-transition-old(treads) {
-  animation-duration: 2000ms; 
-  animation-timing-function: ease;
-} */
-
 ::view-transition-old(tread-1),
 ::view-transition-new(tread-1) {
   height: fit-content;

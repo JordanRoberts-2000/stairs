@@ -13,7 +13,7 @@ const OneTwoCheckbox = () => {
         if (e.target !== e.currentTarget) return;
         field.setValue((value) => !value);
       }}
-      className="flex absolute z-50 right-0 h-full top-1/2 -translate-y-1/2 py-2 pr-4 gap-4 items-center cursor-pointer select-none"
+      className="flex absolute z-20 right-0 h-full top-1/2 -translate-y-1/2 py-2 pr-4 gap-4 items-center cursor-pointer select-none"
     >
       <div className="h-full w-px bg-black" />
       <span className="font-semibold text-xs pointer-events-none">1-2</span>

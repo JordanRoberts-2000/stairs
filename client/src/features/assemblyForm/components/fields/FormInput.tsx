@@ -8,7 +8,7 @@ const FormInput = ({
 }: React.InputHTMLAttributes<HTMLInputElement>) => {
   const field = useFieldContext<string>();
 
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+  const isInvalid = !field.state.meta.isValid && field.state.meta.isTouched;
   return (
     <Field data-invalid={isInvalid} className={cn("relative", className)}>
       <FieldLabel
@@ -27,7 +27,14 @@ const FormInput = ({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
-        onChange={(e) => field.handleChange(e.target.value)}
+        onChange={(e) => {
+          field.setMeta((m) => ({
+            ...m,
+            errors: [],
+            errorMap: {},
+          }));
+          field.handleChange(e.target.value);
+        }}
         {...attr}
       />
       {isInvalid && (

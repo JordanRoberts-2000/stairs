@@ -14,6 +14,7 @@ const Form = ({}) => {
     defaultValues: FORM_DEFAULTS,
     validators: {
       onSubmit: assemblySchema,
+      onBlur: assemblySchema,
     },
     onSubmit: ({ value, formApi }) => {
       const error = validateSession();
@@ -25,6 +26,10 @@ const Form = ({}) => {
       addHistoryEntry(assemblySchema.parse(value));
       formApi.reset();
       toast.success(`Submitted successfully`);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    onSubmitInvalid: () => {
+      toast.error(`Submission failed`);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
   });
@@ -44,25 +49,26 @@ const Form = ({}) => {
               <field.Input
                 inputMode="url"
                 onBlur={() => {
+                  field.handleBlur();
                   const value = field.state.value;
-
-                  // Check if value contains '/'
                   if (value && value.includes("/")) {
-                    // Split by '/'
                     const parts = value.split("/").map((part) => part.trim());
 
-                    // Fill form fields based on available parts
                     if (parts.length >= 1 && parts[0]) {
                       form.setFieldValue("customer", parts[0]);
+                      form.validateField("customer", "submit");
                     }
                     if (parts.length >= 2 && parts[1]) {
                       form.setFieldValue("site", parts[1]);
+                      form.validateField("site", "submit");
                     }
                     if (parts.length >= 3 && parts[2]) {
                       form.setFieldValue("plot", parts[2]);
+                      form.validateField("plot", "submit");
                     }
                     if (parts.length >= 4 && parts[3]) {
                       form.setFieldValue("wos", parts[3]);
+                      form.validateField("wos", "submit");
                     }
                   }
                 }}

@@ -2,34 +2,25 @@ import z from "zod";
 import { DESIGNS } from "../../constants";
 import { FormInputNumber } from "@/utils/formInputNumber";
 
-const treadSchema = z
-  .discriminatedUnion("kind", [
-    z.object({
-      kind: z.literal("preset"),
-      value: FormInputNumber((n) =>
-        n
-          .int("Invalid tread number")
-          .min(1, "Invalid tread number")
-          .max(20, "Tread limit exceeded")
-      ),
-    }),
-    z.object({
-      kind: z.literal("custom"),
-      value: FormInputNumber((n) =>
-        n
-          .int("Invalid tread number")
-          .min(1, "Invalid tread number")
-          .max(20, "Tread limit exceeded")
-      ),
-    }),
-  ])
-  .transform((v) => v.value);
+const treadValue = FormInputNumber((n) =>
+  n
+    .int("Invalid tread number")
+    .min(1, "Invalid tread number")
+    .max(20, "Tread limit exceeded")
+);
+
+const treadPick = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("preset"), value: z.string() }),
+  z.object({ kind: z.literal("custom"), value: z.string() }),
+]);
+
+const treadSchema = treadPick.transform((v) => v.value).pipe(treadValue);
 
 export const assemblySchema = z
   .object({
     customer: z.string().nonempty("Required"),
     site: z.string().nonempty("Required"),
-    plot: FormInputNumber((n) => n.int("Invalid number")),
+    plot: FormInputNumber((n) => n.int("Invalid number").max(1000)),
     isOneTwo: z.boolean(),
     wos: FormInputNumber((n) =>
       n

@@ -16,7 +16,7 @@ type Props = {
 
 const FormNumberOfTreads = ({ design }: Props) => {
   const field = useFieldContext<AssemblySchemaInput["treads"]>();
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+  const isInvalid = field.state.meta.isBlurred && !field.state.meta.isValid;
 
   return (
     <Field data-invalid={isInvalid}>
@@ -24,13 +24,15 @@ const FormNumberOfTreads = ({ design }: Props) => {
         Number of Treads
       </FieldLabel>
       <ToggleGroup
-        className="gap-2 relative"
+        className="gap-2 relative items-stretch"
         type="single"
         value={
           field.state.value.kind === "preset" ? field.state.value.value : ""
         }
         onValueChange={(value) => {
-          if (value) field.handleChange({ kind: "preset", value });
+          if (!value) return;
+          field.handleChange({ kind: "preset", value });
+          field.handleBlur();
         }}
       >
         {TREADS_CONFIG[design].options.map((tread_num, i) => (
@@ -38,7 +40,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
             key={tread_num}
             value={tread_num.toString()}
             style={{ viewTransitionName: `tread-${i}` }}
-            className="font-black flex-1 border-2 shadow-md! rounded-[4px]! border-cyan-800 py-6"
+            className="font-black flex-1 border-2 py-5 bg-white shadow-md! rounded-[4px]! border-cyan-800"
           >
             <div style={{ viewTransitionName: `tread-${i}-num` }}>
               {tread_num}
@@ -46,17 +48,22 @@ const FormNumberOfTreads = ({ design }: Props) => {
           </ToggleGroupItem>
         ))}
         <div
-          className="relative  text-center h-12 font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary py-6"
+          className="relative  text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary"
           style={{ viewTransitionName: "treads" }}
         >
           <Input
             inputMode="numeric"
-            className="peer border-none shadow-none"
+            className="peer border-none shadow-none text-center h-full"
             placeholder=" "
             onBlur={field.handleBlur}
-            onChange={(e) =>
-              field.handleChange({ kind: "custom", value: e.target.value })
-            }
+            onChange={(e) => {
+              field.setMeta((m) => ({
+                ...m,
+                errors: [],
+                errorMap: {},
+              }));
+              field.handleChange({ kind: "custom", value: e.target.value });
+            }}
             value={
               field.state.value.kind === "custom" ? field.state.value.value : ""
             }
@@ -65,7 +72,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
           <span
             aria-hidden
             style={{ viewTransitionName: "treads-ph" }}
-            className="pointer-events-none absolute inset-0 grid place-items-center peer-not-placeholder-shown:opacity-0"
+            className="pointer-events-none text-gray-500 font-semibold absolute inset-0 grid place-items-center peer-not-placeholder-shown:opacity-0"
           >
             Custom
           </span>

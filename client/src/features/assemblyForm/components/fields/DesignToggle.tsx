@@ -13,7 +13,7 @@ import { flushSync } from "react-dom";
 
 const DesignToggle = () => {
   const field = useFieldContext<AssemblySchemaInput["design"]>();
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+  const isInvalid = !field.state.meta.isValid;
 
   const isDesign = (v: string): v is AssemblySchemaInput["design"] =>
     (DESIGNS as readonly string[]).includes(v);

@@ -5,9 +5,10 @@ import { useEffect } from "react";
 
 function App() {
   // useEffect(() => {
-  //   document.addEventListener("visibilitychange", () =>
-  //     alert("visibilitychange")
-  //   );
+  //   document.addEventListener("visibilitychange", () => {
+  //     localStorage.clear();
+  //     alert("visibilitychange");
+  //   });
   // }, []);
   return (
     <>
