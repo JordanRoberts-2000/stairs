@@ -1,4 +1,4 @@
-import type { FormSchemaInput } from "../../schema";
+import type { AssemblySchemaInput } from "../../schema";
 import { Field, FieldLabel } from "../../../../components/ui/field";
 import {
   ToggleGroup,
@@ -12,10 +12,10 @@ import { DESIGNS } from "../../../../constants";
 import { flushSync } from "react-dom";
 
 const DesignToggle = () => {
-  const field = useFieldContext<FormSchemaInput["design"]>();
+  const field = useFieldContext<AssemblySchemaInput["design"]>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
-  const isDesign = (v: string): v is FormSchemaInput["design"] =>
+  const isDesign = (v: string): v is AssemblySchemaInput["design"] =>
     (DESIGNS as readonly string[]).includes(v);
 
   return (

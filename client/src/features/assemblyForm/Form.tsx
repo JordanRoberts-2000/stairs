@@ -6,7 +6,6 @@ import { assemblySchema } from "./schema";
 import { useActions } from "@/store";
 import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
-import OneTwoCheckbox from "./components/fields/OneTwoCheckbox";
 
 const Form = ({}) => {
   const { addHistoryEntry, validateSession } = useActions();
@@ -41,7 +40,34 @@ const Form = ({}) => {
       >
         <div className="space-y-10 mb-8">
           <form.AppField name="customer">
-            {(field) => <field.Input />}
+            {(field) => (
+              <field.Input
+                inputMode="url"
+                onBlur={() => {
+                  const value = field.state.value;
+
+                  // Check if value contains '/'
+                  if (value && value.includes("/")) {
+                    // Split by '/'
+                    const parts = value.split("/").map((part) => part.trim());
+
+                    // Fill form fields based on available parts
+                    if (parts.length >= 1 && parts[0]) {
+                      form.setFieldValue("customer", parts[0]);
+                    }
+                    if (parts.length >= 2 && parts[1]) {
+                      form.setFieldValue("site", parts[1]);
+                    }
+                    if (parts.length >= 3 && parts[2]) {
+                      form.setFieldValue("plot", parts[2]);
+                    }
+                    if (parts.length >= 4 && parts[3]) {
+                      form.setFieldValue("wos", parts[3]);
+                    }
+                  }
+                }}
+              />
+            )}
           </form.AppField>
           <form.AppField name="site">
             {(field) => <field.Input />}
