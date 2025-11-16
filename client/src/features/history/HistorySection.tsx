@@ -6,48 +6,64 @@ const HistorySection = () => {
   const profile = useOperatorProfile();
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 relative">
+    <div className="relative flex min-h-0 flex-1 flex-col">
       {/* top fade */}
-      <div className="absolute top-0 w-full h-8 z-10 bg-linear-to-b from-white/95 to-transparent" />
+      <div className="absolute top-0 z-10 h-8 w-full bg-linear-to-b from-white/95 to-transparent" />
       {/* bottom fade */}
-      <div className="absolute bottom-0 w-full h-8 z-10 bg-linear-to-t from-white to-transparent" />
+      <div className="absolute bottom-0 z-10 h-8 w-full bg-linear-to-t from-white to-transparent" />
 
-      <div className="flex flex-1 min-h-0 overflow-y-auto flex-col px-2">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-2">
         {!profile || profile.history.length === 0 ? (
-          <div className="my-2 border font-mono border-gray-200 shadow rounded-[8px] h-40 grid place-items-center">
+          <div className="my-2 grid h-40 place-items-center rounded-[8px] border border-gray-200 font-mono shadow">
             no entries
           </div>
         ) : (
-          [...profile.history].reverse().map((entry, i) => (
-            <div
-              key={`${entry.customer}-${entry.plot}-${i}`}
-              className="bg-background relative border-b flex font-serif flex-col gap-1 border-neutral-400 p-2 pt-4"
-            >
-              <div className="absolute bottom-0 right-0 ml-auto mr-2 font-mono font-bold text-black text-lg">
-                {entry.plot}
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <DesignIcon design={entry.design} />
-                <div className="capitalize font-semibold">{entry.design}</div>
-                <div className="ml-auto text-xs">
-                  {formatTime(entry.timestamp)}
+          [...profile.history].reverse().map((entry, i) => {
+            const plot = String(entry.plot);
+            const hasHalf = /(?:\s|-)?1\/2$/.test(plot);
+            const basePlot = hasHalf
+              ? plot.replace(/(?:\s|-)?1\/2$/, "")
+              : plot;
+
+            return (
+              <div
+                key={`${entry.customer}-${entry.plot}-${i}`}
+                className="relative flex flex-col gap-1 border-b border-neutral-400 bg-background p-2 pt-4 font-serif"
+              >
+                <div className="absolute right-0 bottom-0 mr-2 ml-auto font-mono text-lg font-bold text-black">
+                  {hasHalf && (
+                    <span className="mr-2 bg-amber-100 px-1 text-xs font-normal">
+                      1-2
+                    </span>
+                  )}
+                  {basePlot}
+                </div>
+
+                <div className="flex items-center gap-2 text-sm">
+                  <DesignIcon design={entry.design} />
+                  <div className="font-semibold capitalize">{entry.design}</div>
+                  <div className="ml-auto text-xs">
+                    {formatTime(entry.timestamp)}
+                  </div>
+                </div>
+
+                <div className="flex gap-1 capitalize">
+                  <div className="font-black">{entry.customer}</div>
+                  <div>/</div>
+                  <div className="text-gray-500">{entry.site}</div>
+                </div>
+
+                <div className="mt-1 flex gap-4 font-mono text-xs">
+                  <div className="bg-sky-100 px-2 py-1 text-sky-700">
+                    Treads: {entry.treads}
+                  </div>
+                  <div className="bg-purple-100 px-2 py-1 text-purple-700">
+                    Wos: {entry.wos}
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-1 capitalize">
-                <div className="font-black">{entry.customer}</div>
-                <div>/</div>
-                <div className="text-gray-500">{entry.site}</div>
-              </div>
-              <div className="text-xs flex font-mono gap-4 mt-1">
-                <div className="bg-sky-100 text-bg-sky-700 px-2 py-1">
-                  Treads: {entry.treads}
-                </div>
-                <div className="bg-purple-100 text-purple-700 px-2 py-1">
-                  Wos: {entry.wos}
-                </div>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
