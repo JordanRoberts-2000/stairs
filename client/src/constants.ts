@@ -21,9 +21,31 @@ export const FORM_DEFAULTS = {
   },
 } satisfies AssemblySchemaInput as AssemblySchemaInput;
 
-export const OPERATORS = new Set(["jordan", "sadman"]);
+export const OPERATORS = [
+  // "Owen Henderson",
+  "Jordon Roberts",
+  // "Thomas Hopkins",
+  "Sadman Rafid",
+  // "Jermaine Arthur",
+  // "Kasper Grudzinski",
+  // "Adam Belc",
+  // "Steven Waldren",
+  // "Marian Dziemba",
+  // "Kyle Leighton",
+  // "Tristian Anderson",
+  // "Guntis Lapins",
+  // "Patrica Haidau",
+  // "Pawel Baryla",
+  // "BLAZEJ MROZINSKI",
+  // "Jake Spicer",
+  // "Kevin King",
+  // "Lukasz Wierzbicki",
+  // "Marcus",
+  // "Lewis",
+] as const;
+
 export const BENCH_NUMBERS = new Set(
-  Array.from({ length: 12 }, (_, i) => i + 1)
+  Array.from({ length: 12 }, (_, i) => i + 1),
 );
 
 export const RESET_TIME = 9 * 60 * 60 * 1000;

@@ -1,20 +1,15 @@
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import SettingsIcon from "@/assets/settings.svg?react";
-import { Button, Field, FieldError, Input } from "@/components/ui";
+import { Button, Field } from "@/components/ui";
 import { Label } from "@/components/ui/label";
 import { useActions } from "@/store";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { useForm } from "@tanstack/react-form";
-import { FormInputNumber } from "@/utils/formInputNumber";
 import type { OperatorProfile } from "@/types";
 import ClearHistoryConfirm from "./ClearHistoryConfirm";
 import {

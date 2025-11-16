@@ -8,11 +8,11 @@ import "./global.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-    {/* {import.meta.env.DEV && (
+    {import.meta.env.DEV && (
       <TanStackDevtools
         config={{ position: "middle-left" }}
         plugins={[formDevtoolsPlugin()]}
       />
-    )} */}
-  </StrictMode>
+    )}
+  </StrictMode>,
 );
