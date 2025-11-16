@@ -9,6 +9,13 @@ import {
 import { useFieldContext } from "@/features/assemblyForm/hooks";
 import { TREADS_CONFIG } from "@/constants";
 import type { AssemblySchemaInput } from "@/features/assemblyForm/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   design: AssemblySchemaInput["design"];
@@ -20,11 +27,11 @@ const FormNumberOfTreads = ({ design }: Props) => {
 
   return (
     <Field data-invalid={isInvalid}>
-      <FieldLabel htmlFor={field.name} className="font-black text-md">
+      <FieldLabel htmlFor={field.name} className="text-md font-black">
         Number of Treads
       </FieldLabel>
       <ToggleGroup
-        className="gap-2 relative items-stretch"
+        className="relative flex items-stretch gap-2"
         type="single"
         value={
           field.state.value.kind === "preset" ? field.state.value.value : ""
@@ -40,7 +47,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
             key={tread_num}
             value={tread_num.toString()}
             style={{ viewTransitionName: `tread-${i}` }}
-            className="font-black flex-1 border-2 py-5 bg-white shadow-md! rounded-[4px]! border-cyan-800"
+            className="flex-1 overflow-clip rounded-[4px]! border-2 border-cyan-800 bg-white px-0 py-6 font-black shadow-md!"
           >
             <div style={{ viewTransitionName: `tread-${i}-num` }}>
               {tread_num}
@@ -48,40 +55,52 @@ const FormNumberOfTreads = ({ design }: Props) => {
           </ToggleGroupItem>
         ))}
         <div
-          className="relative  text-center font-black flex-2 border-2 shadow-md! rounded-[4px]! border-primary"
+          data-selected={
+            field.state.value.kind === "custom" && field.state.value.value
+              ? "true"
+              : "false"
+          }
+          className="bg relative flex-2 overflow-clip rounded-[4px]! border-2 border-primary text-center font-black shadow-md! data-[selected=true]:bg-neutral-200"
           style={{ viewTransitionName: "treads" }}
         >
-          <Input
-            inputMode="numeric"
-            className="peer border-none shadow-none text-center h-full"
-            placeholder=" "
-            onBlur={field.handleBlur}
-            onChange={(e) => {
+          <Select
+            value={
+              field.state.value.kind === "custom" ? field.state.value.value : ""
+            }
+            onValueChange={(value) => {
               field.setMeta((m) => ({
                 ...m,
                 errors: [],
                 errorMap: {},
               }));
-              field.handleChange({ kind: "custom", value: e.target.value });
+              field.handleChange({ kind: "custom", value });
+              field.handleBlur();
             }}
-            value={
-              field.state.value.kind === "custom" ? field.state.value.value : ""
-            }
-            maxLength={2}
-          />
-          <span
-            aria-hidden
-            style={{ viewTransitionName: "treads-ph" }}
-            className="pointer-events-none text-gray-500 font-semibold absolute inset-0 grid place-items-center peer-not-placeholder-shown:opacity-0"
           >
-            Custom
-          </span>
+            <SelectTrigger
+              data-selected={
+                field.state.value.kind === "custom" && field.state.value.value
+                  ? "true"
+                  : "false"
+              }
+              className="ml-2 flex h-full! w-full! items-center justify-center gap-1 border-none py-0 !text-center font-black text-cyan-700"
+            >
+              <SelectValue placeholder="Custom" />
+            </SelectTrigger>
+            <SelectContent className="h-[400px]">
+              {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => (
+                <SelectItem key={n} value={String(n)}>
+                  {n}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {isInvalid && (
           <FieldError
             errors={field.state.meta.errors}
-            className="absolute font-bold text-xs right-0 -top-2 -translate-y-full pr-2"
+            className="absolute -top-2 right-0 -translate-y-full pr-2 text-xs font-bold"
           />
         )}
       </ToggleGroup>
