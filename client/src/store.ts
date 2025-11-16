@@ -15,6 +15,7 @@ type StoreActions = {
   setOperator: (operator: Operator) => void;
   setBench: (bench: number) => Result<void, string>;
   setTarget: (target: number) => Result<void, string>;
+  setTargetEnabled: (enabled: boolean) => Result<void, string>;
   setDarkMode: (darkMode: boolean) => Result<void, string>;
   setAutoClearHistory: (autoClearHistory: boolean) => Result<void, string>;
   clearUserHistory: () => Result<void, string>;
@@ -141,6 +142,29 @@ const useStore = create<Store>()(
           return ok(undefined);
         },
 
+        setTargetEnabled: (enabled: boolean) => {
+          const { operator } = get().context.session;
+          if (!operator) return err("No operator selected");
+
+          const profile = get().context.profiles[operator];
+          if (!profile) return err("Profile not found");
+
+          set((state) => ({
+            context: {
+              ...state.context,
+              profiles: {
+                ...state.context.profiles,
+                [operator]: {
+                  ...profile,
+                  target: enabled ? (profile.target ?? 14) : undefined,
+                },
+              },
+            },
+          }));
+
+          return ok(undefined);
+        },
+
         setDarkMode: (darkMode: boolean) => {
           const { operator } = get().context.session;
           if (!operator) return err("No operator selected");
@@ -202,8 +226,8 @@ const useStore = create<Store>()(
         },
       },
     }),
-    { name: "store", partialize: (s) => ({ context: s.context }) }
-  )
+    { name: "store", partialize: (s) => ({ context: s.context }) },
+  ),
 );
 
 export const useSession = () => useStore((state) => state.context.session);

@@ -17,102 +17,66 @@ import { useForm } from "@tanstack/react-form";
 import { FormInputNumber } from "@/utils/formInputNumber";
 import type { OperatorProfile } from "@/types";
 import ClearHistoryConfirm from "./ClearHistoryConfirm";
-
-const targetSchema = FormInputNumber((n) =>
-  n
-    .int("Invalid Target number")
-    .min(8, "Target must be ≥ 8")
-    .max(24, "Target must be ≤ 24")
-);
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = { profile: OperatorProfile };
 
 const SettingsDialog = ({ profile }: Props) => {
-  const { setTarget, setAutoClearHistory, setDarkMode } = useActions();
-
-  const settingsForm = useForm({
-    defaultValues: { target: String(profile.target) },
-  });
+  const { setTarget, setAutoClearHistory, setDarkMode, setTargetEnabled } =
+    useActions();
 
   return (
     <DialogContent
       onOpenAutoFocus={(e) => e.preventDefault()}
-      className="sm:max-w-[425px] rounded-2xl"
+      className="rounded-2xl sm:max-w-[425px]"
     >
       <DialogHeader>
-        <DialogTitle className="font-black">Settings</DialogTitle>
+        <DialogTitle className="border-b pb-4 font-black">Settings</DialogTitle>
       </DialogHeader>
-      <ul className="flex flex-col gap-6 mb-6">
-        <li className="flex justify-between items-center">
-          <settingsForm.Field
-            name="target"
-            asyncDebounceMs={1000}
-            validators={{
-              onBlur: ({ value }) => {
-                const parsed = targetSchema.safeParse(value);
-                if (!parsed.success) {
-                  const msg =
-                    parsed.error.issues[0]?.message ?? "Invalid value";
-                  return { message: msg };
-                }
-
-                let result = setTarget(parsed.data);
+      <ul className="mb-6 flex flex-col gap-8">
+        <li className="flex items-center justify-between">
+          <Field orientation={"horizontal"} className={"relative"}>
+            <Label className="font-mono">Target:</Label>
+            <Select
+              value={
+                profile?.target !== undefined ? String(profile.target) : "14"
+              }
+              disabled={profile?.target === undefined}
+              onValueChange={(value) => {
+                let result = setTarget(Number(value));
                 if (result.isErr()) {
                   console.error(`Failed to set target, error: ${result.error}`);
                   toast.error("Failed to set target");
                 }
-                return undefined;
-              },
-              onChangeAsync: ({ value }) => {
-                const parsed = targetSchema.safeParse(value);
-                if (!parsed.success) {
-                  const msg =
-                    parsed.error.issues[0]?.message ?? "Invalid value";
-                  return { message: msg };
-                }
-
-                let result = setTarget(parsed.data);
-                if (result.isErr()) {
-                  console.error(`Failed to set target, error: ${result.error}`);
-                  toast.error("Failed to set target");
-                }
-                return undefined;
-              },
-            }}
-          >
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid} className={"relative"}>
-                  <Label className="font-mono">Target</Label>
-                  <Input
-                    maxLength={2}
-                    inputMode="numeric"
-                    className="w-16"
-                    min={8}
-                    max={24}
-                    id={field.name}
-                    aria-invalid={isInvalid}
-                    name={field.name}
-                    onBlur={field.handleBlur}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {isInvalid && (
-                    <FieldError
-                      className="absolute text-xs bottom-0 pt-1 translate-y-full font-bold pr-2"
-                      errors={field.state.meta.errors}
-                    />
-                  )}
-                </Field>
-              );
-            }}
-          </settingsForm.Field>
+              }}
+            >
+              <SelectTrigger className="ml-auto h-fit w-18 gap-2 text-center">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] overflow-y-auto">
+                {Array.from({ length: 23 }, (_, i) => i + 6).map((num) => (
+                  <SelectItem key={num} value={String(num)}>
+                    {num}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Switch
+              checked={profile?.target !== undefined}
+              onCheckedChange={(checked) => setTargetEnabled(checked)}
+              id="target-toggle"
+            />
+          </Field>
         </li>
         <li className="flex items-center justify-between">
           <Label className="font-mono" htmlFor="airplane-mode">
-            Dark mode
+            Dark mode:
           </Label>
           <Switch
             checked={profile.darkMode}
@@ -127,7 +91,7 @@ const SettingsDialog = ({ profile }: Props) => {
         </li>
         <li className="flex items-center justify-between">
           <Label className="font-mono" htmlFor="airplane-mode">
-            Automatic History Clearing
+            Automatic History Clearing:
           </Label>
           <Switch
             checked={profile.autoClearHistory}
@@ -136,7 +100,7 @@ const SettingsDialog = ({ profile }: Props) => {
               if (result.isErr()) {
                 console.error(
                   "failed to toggle autoClearHistory: ",
-                  result.error
+                  result.error,
                 );
               }
             }}
@@ -147,7 +111,7 @@ const SettingsDialog = ({ profile }: Props) => {
       <DialogFooter className="flex flex-row">
         <ClearHistoryConfirm />
         <DialogClose asChild>
-          <Button className="flex-1" variant="outline">
+          <Button className="flex-1 rounded-[8px]" variant="outline">
             Close
           </Button>
         </DialogClose>

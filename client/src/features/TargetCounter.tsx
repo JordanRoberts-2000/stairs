@@ -1,33 +1,43 @@
 import { useOperatorProfile } from "@/store";
-import { useEffect } from "react";
+import StairsIcon from "@/assets/stairs.svg?react";
 
-const TargetCounter = ({}) => {
+const TargetCounter = () => {
   const profile = useOperatorProfile();
-
   const count = profile?.history.length ?? 0;
   const target = profile?.target ?? 14;
 
-  return (
-    <div className="flex flex-col">
-      <div className="ml-auto text-xs font-bold px-2 py-1">
-        {count} / {target}
+  if (!profile || profile.target !== undefined) {
+    return (
+      <div className="flex flex-col">
+        <div className="ml-auto px-2 py-1 text-xs font-bold">
+          {count} / {target}
+        </div>
+        <div className="mt-2 mb-2 flex h-1.5 gap-1 rounded-xl">
+          {Array.from({ length: target }, (_, i) => {
+            const isOverflow = count > target && i < count - target;
+            return (
+              <div
+                key={`bar-${i}`}
+                className={`flex-1 border shadow ${
+                  isOverflow
+                    ? "bg-yellow-400"
+                    : !isOverflow && i < count
+                      ? "bg-cyan-600"
+                      : ""
+                }`}
+              />
+            );
+          })}
+        </div>
       </div>
-      <div className="h-1.5 flex mb-2 mt-2 gap-1 rounded-xl">
-        {Array.from({ length: target }, (_, i) => {
-          const isOverflow = count > target && i < count - target;
-          return (
-            <div
-              key={`bar-${i}`}
-              className={`flex-1 border rounded-4xl shadow ${
-                isOverflow
-                  ? "bg-yellow-400"
-                  : !isOverflow && i < count
-                  ? "bg-cyan-600"
-                  : ""
-              }`}
-            />
-          );
-        })}
+    );
+  }
+
+  return (
+    <div className="flex">
+      <div className="ml-auto flex items-center gap-2 px-2 py-1 text-sm font-semibold text-white">
+        <div>{count}</div>
+        <StairsIcon className="size-8" />
       </div>
     </div>
   );

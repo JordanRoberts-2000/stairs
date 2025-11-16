@@ -7,7 +7,7 @@ export type Entry = AssemblySchema & {
 };
 
 export type OperatorProfile = {
-  target: number;
+  target?: number;
   history: Entry[];
   autoClearHistory: boolean;
   darkMode: boolean;

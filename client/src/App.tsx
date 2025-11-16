@@ -1,27 +1,16 @@
 import Form from "./features/assemblyForm/Form";
 import Header from "./components/Header";
 import { Toaster } from "./components/ui/sonner";
-import { useEffect } from "react";
-import { useClearHistoryCheck } from "./utils/clearHistoryCheck";
 import DarkModeSync from "./utils/DarkModeSync";
+import { useVisibilityClearHistoryCheck } from "./hooks/useVisibilityClearHistoryCheck";
 
 function App() {
-  const clearHistoryCheck = useClearHistoryCheck();
+  useVisibilityClearHistoryCheck();
 
-  useEffect(() => {
-    const onVisibility = () => {
-      clearHistoryCheck();
-    };
-
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, [clearHistoryCheck]);
   return (
     <>
       <DarkModeSync />
-      <div className="mx-auto min-h-screen w-full max-w-xl border-x-2 border-neutral-800 flex flex-col bg-background">
+      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col border-x-2 border-neutral-800 bg-background">
         <Header />
         <Form />
         <Toaster duration={2000} />

@@ -28,7 +28,9 @@ const ClearHistoryConfirm = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="flex-1 bg-neutral-800">Clear History</Button>
+        <Button className="flex-1 bg-neutral-800 rounded-[8px]">
+          Clear History
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent className="rounded-2xl">
