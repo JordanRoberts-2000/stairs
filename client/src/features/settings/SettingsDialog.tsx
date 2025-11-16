@@ -28,7 +28,7 @@ const targetSchema = FormInputNumber((n) =>
 type Props = { profile: OperatorProfile };
 
 const SettingsDialog = ({ profile }: Props) => {
-  const { setTarget, setAutoClearHistory } = useActions();
+  const { setTarget, setAutoClearHistory, setDarkMode } = useActions();
 
   const settingsForm = useForm({
     defaultValues: { target: String(profile.target) },
@@ -112,9 +112,18 @@ const SettingsDialog = ({ profile }: Props) => {
         </li>
         <li className="flex items-center justify-between">
           <Label className="font-mono" htmlFor="airplane-mode">
-            Dark Mode
+            Dark mode
           </Label>
-          <Switch id="airplane-mode" />
+          <Switch
+            checked={profile.darkMode}
+            onCheckedChange={(next) => {
+              const result = setDarkMode(next);
+              if (result.isErr()) {
+                console.error("failed to toggle darkmode: ", result.error);
+              }
+            }}
+            id="airplane-mode"
+          />
         </li>
         <li className="flex items-center justify-between">
           <Label className="font-mono" htmlFor="airplane-mode">

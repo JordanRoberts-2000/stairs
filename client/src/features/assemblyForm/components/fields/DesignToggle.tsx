@@ -39,15 +39,24 @@ const DesignToggle = () => {
             });
         }}
       >
-        <ToggleGroupItem value="straight" className="font-black! text-xs!">
+        <ToggleGroupItem
+          value="straight"
+          className="font-black! bg-white text-xs!"
+        >
           <StraightIcon className="size-8" />
           Straight
         </ToggleGroupItem>
-        <ToggleGroupItem value="winder" className="font-black text-xs!">
+        <ToggleGroupItem
+          value="winder"
+          className="font-black bg-white text-xs!"
+        >
           <WinderIcon className="size-8" />
           Winder
         </ToggleGroupItem>
-        <ToggleGroupItem value="doubleWinder" className="font-black text-xs!">
+        <ToggleGroupItem
+          value="doubleWinder"
+          className="font-black bg-white text-xs!"
+        >
           <DoubleWinderIcon className="size-8" />
           Double Winder
         </ToggleGroupItem>
