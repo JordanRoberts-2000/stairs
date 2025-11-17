@@ -8,8 +8,10 @@ import { useFieldContext } from "../../hooks";
 import StraightIcon from "@/assets/design/straight.svg?react";
 import WinderIcon from "@/assets/design/winder.svg?react";
 import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
-import { DESIGNS } from "../../../../constants";
+import { DESIGNS, GOOGLE_DESIGN_VALUES } from "../../../../constants";
 import { flushSync } from "react-dom";
+import DesignIcon from "@/components/DesignIcon";
+import { startViewTransition } from "@/utils";
 
 const DesignToggle = () => {
   const field = useFieldContext<AssemblySchemaInput["design"]>();
@@ -22,44 +24,41 @@ const DesignToggle = () => {
     <Field data-invalid={isInvalid} className="relative">
       <FieldLabel
         htmlFor={field.name}
-        className="capitalize font-black text-md text-black!"
+        className="text-md font-black text-black! capitalize"
       >
         {field.name}
       </FieldLabel>
       <ToggleGroup
         type="single"
-        className="w-full *:flex-1 *:border-2 *:border-cyan-800 *:shadow-md! *:rounded-[8px]! *:h-fit *:flex-col gap-3 *:py-4"
+        className="w-full gap-3 *:h-fit *:flex-1 *:flex-col *:rounded-[8px]! *:border-2 *:py-4 *:shadow-md!"
         value={field.state.value}
         onValueChange={(val) => {
           if (val !== field.state.value && isDesign(val))
-            document.startViewTransition(() => {
+            startViewTransition(() => {
               flushSync(() => {
                 field.handleChange(val);
               });
             });
         }}
       >
-        <ToggleGroupItem
-          value="straight"
-          className="font-black! bg-white text-xs!"
-        >
-          <StraightIcon className="size-8" />
-          Straight
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="winder"
-          className="font-black bg-white text-xs!"
-        >
-          <WinderIcon className="size-8" />
-          Winder
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="doubleWinder"
-          className="font-black bg-white text-xs!"
-        >
-          <DoubleWinderIcon className="size-8" />
-          Double Winder
-        </ToggleGroupItem>
+        {DESIGNS.map((design) => {
+          const isSelected = field.state.value === design;
+          return (
+            <ToggleGroupItem
+              key={design}
+              value={design}
+              className="border-neutral-400! bg-white text-xs! font-black! data-[state=on]:border-neutral-800! data-[state=on]:bg-yellow-50!"
+            >
+              <DesignIcon
+                design={design}
+                variant={isSelected ? "default" : "outline"}
+                blurBackground={!isSelected}
+                className="size-9 data-[state=on]:fill-black"
+              />
+              {GOOGLE_DESIGN_VALUES[design]}
+            </ToggleGroupItem>
+          );
+        })}
       </ToggleGroup>
     </Field>
   );

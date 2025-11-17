@@ -4,19 +4,19 @@ import SessionToggles from "@/features/SessionToggles";
 
 const Header = ({}) => {
   return (
-    <header className="flex flex-col shadow-md px-3 py-2 mb-4 bg-neutral-800 rounded-2xl mx-2 text-white! z-50 sticky top-2">
-      <div className="bg-linear-to-b from-white to-transparent h-4 inset-x-0 translate-y-full absolute bottom-0"></div>
+    <header className="sticky top-2 z-50 mx-2 mb-4 flex flex-col rounded-2xl bg-neutral-800 px-3 py-2 text-white! shadow-md">
+      <div className="absolute inset-x-0 bottom-0 h-4 translate-y-full bg-linear-to-b from-white to-transparent"></div>
       <SessionToggles />
       <div className="flex pt-2">
-        <div className="text-3xl mx-auto font-mono tracking-tighter translate-y-2 p-1 flex items-center">
-          <div className="mr-2 gap-1  flex items-center">
+        <div className="mx-auto flex translate-y-2 items-center p-1 font-mono text-3xl tracking-tighter">
+          <div className="mr-2 flex items-center gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={0.5}
               stroke="currentColor"
-              className="size-8 fill-cyan-700 text-white"
+              className="size-8 fill-cyan-600 text-white"
             >
               <path
                 strokeLinecap="round"

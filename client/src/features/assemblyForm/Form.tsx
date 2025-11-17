@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui";
 import { useAppForm } from "@/features/assemblyForm/hooks";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
-import { FORM_DEFAULTS } from "../../constants";
+import { FORM_DEFAULTS, GOOGLE_DESIGN_VALUES } from "../../constants";
 import { assemblySchema } from "./schema";
 import { useActions } from "@/store";
 import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
+import { CustomerInput } from "./components/fields/CustomerInput";
 
 const Form = ({}) => {
   const { addHistoryEntry, validateSession } = useActions();
@@ -23,10 +24,28 @@ const Form = ({}) => {
         return;
       }
 
-      addHistoryEntry(assemblySchema.parse(value));
+      const entry = assemblySchema.parse(value);
+      addHistoryEntry(entry);
       formApi.reset();
       toast.success(`Submitted successfully`);
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const base =
+        "https://docs.google.com/forms/d/1jE8X_JFzFmmjoTZjvxdDyJUi4A3o-063D9sOR1dTGz0/viewform";
+      const params = new URLSearchParams({
+        "entry.691366618": "17/11",
+        "entry.1725229977": result.value.operator,
+        "entry.557826237": String(result.value.bench),
+        "entry.1416759496": entry.customer,
+        "entry.1701527705": entry.site,
+        "entry.2141275577": entry.plot,
+        "entry.1294180363": GOOGLE_DESIGN_VALUES[entry.design],
+        "entry.1028831130": String(entry.treads),
+        "entry.1835744144": String(entry.wos),
+      });
+
+      const prefillUrl = `${base}?${params.toString()}`;
+      window.open(prefillUrl, "_blank", "noopener,noreferrer");
     },
     onSubmitInvalid: () => {
       toast.error(`Submission failed`);
@@ -37,44 +56,14 @@ const Form = ({}) => {
   return (
     <>
       <form
-        className="flex flex-col px-4 pt-4 mt-2 mx-2 pb-20 bg-background"
+        className="mx-2 mt-2 flex flex-col bg-background px-4 pt-4 pb-20"
         onSubmit={(e) => {
           e.preventDefault();
           form.handleSubmit();
         }}
       >
-        <div className="space-y-10 mb-8">
-          <form.AppField name="customer">
-            {(field) => (
-              <field.Input
-                inputMode="url"
-                onBlur={() => {
-                  field.handleBlur();
-                  const value = field.state.value;
-                  if (value && value.includes("/")) {
-                    const parts = value.split("/").map((part) => part.trim());
-
-                    if (parts.length >= 1 && parts[0]) {
-                      form.setFieldValue("customer", parts[0]);
-                      form.validateField("customer", "submit");
-                    }
-                    if (parts.length >= 2 && parts[1]) {
-                      form.setFieldValue("site", parts[1]);
-                      form.validateField("site", "submit");
-                    }
-                    if (parts.length >= 3 && parts[2]) {
-                      form.setFieldValue("plot", parts[2]);
-                      form.validateField("plot", "submit");
-                    }
-                    if (parts.length >= 4 && parts[3]) {
-                      form.setFieldValue("wos", parts[3]);
-                      form.validateField("wos", "submit");
-                    }
-                  }
-                }}
-              />
-            )}
-          </form.AppField>
+        <div className="mb-8 space-y-10 rounded-2xl bg-yellow-50/40 px-2 py-4">
+          <CustomerInput form={form} />
           <form.AppField name="site">
             {(field) => <field.Input />}
           </form.AppField>
@@ -105,7 +94,7 @@ const Form = ({}) => {
           </div>
         </div>
         <DesignTreadsSection form={form} />
-        <Button className="mt-8 mx-auto font-mono bg-neutral-800 size-fit text-2xl py-3 px-24 rounded-[8px]">
+        <Button className="mx-auto mt-8 size-fit rounded-[8px] bg-neutral-800 px-24 py-3 font-mono text-2xl">
           Submit
         </Button>
       </form>

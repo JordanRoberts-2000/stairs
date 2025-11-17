@@ -20,9 +20,9 @@ const TargetCounter = () => {
                 key={`bar-${i}`}
                 className={`flex-1 border shadow ${
                   isOverflow
-                    ? "bg-yellow-400"
+                    ? "bg-cyan-300"
                     : !isOverflow && i < count
-                      ? "bg-cyan-600"
+                      ? "bg-yellow-100"
                       : ""
                 }`}
               />

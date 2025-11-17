@@ -1,6 +1,15 @@
-import type { AssemblySchemaInput } from "./features/assemblyForm/schema";
+import type {
+  AssemblySchema,
+  AssemblySchemaInput,
+} from "./features/assemblyForm/schema";
 
 export const DESIGNS = ["straight", "winder", "doubleWinder"] as const;
+
+export const GOOGLE_DESIGN_VALUES: Record<AssemblySchema["design"], string> = {
+  straight: "Straight",
+  winder: "Winder",
+  doubleWinder: "Double Winder",
+};
 
 export const TREADS_CONFIG = {
   straight: { options: [10, 11, 12], default: 12 },

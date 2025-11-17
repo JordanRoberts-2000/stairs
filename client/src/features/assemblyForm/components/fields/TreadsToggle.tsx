@@ -45,10 +45,10 @@ const FormNumberOfTreads = ({ design }: Props) => {
           <ToggleGroupItem
             key={tread_num}
             value={tread_num.toString()}
-            style={{ viewTransitionName: `tread-${i}` }}
-            className="flex-1 overflow-clip rounded-[4px]! border-2 border-cyan-800 bg-white px-0 py-6 font-black shadow-md!"
+            style={{ viewTransitionName: `tread-group-item-${i}` }}
+            className="flex-1 overflow-clip rounded-[4px]! border-2 border-neutral-400 bg-white px-0 py-6 font-black shadow-md! data-[state=on]:border-black! data-[state=on]:bg-yellow-50!"
           >
-            <div style={{ viewTransitionName: `tread-${i}-num` }}>
+            <div style={{ viewTransitionName: `tread-group-item-text-${i}` }}>
               {tread_num}
             </div>
           </ToggleGroupItem>
@@ -59,8 +59,8 @@ const FormNumberOfTreads = ({ design }: Props) => {
               ? "true"
               : "false"
           }
-          className="bg relative flex-2 overflow-clip rounded-[4px]! border-2 border-primary text-center font-black shadow-md! data-[selected=true]:bg-neutral-200"
-          style={{ viewTransitionName: "treads" }}
+          className="bg relative flex-2 overflow-clip rounded-[4px]! border-2 border-primary bg-white text-center font-black shadow-md! data-[selected=true]:bg-neutral-200"
+          style={{ viewTransitionName: "tread-custom-select" }}
         >
           <Select
             value={
@@ -95,13 +95,6 @@ const FormNumberOfTreads = ({ design }: Props) => {
             </SelectContent>
           </Select>
         </div>
-
-        {isInvalid && (
-          <FieldError
-            errors={field.state.meta.errors}
-            className="absolute -top-2 right-0 -translate-y-full pr-2 text-xs font-bold"
-          />
-        )}
       </ToggleGroup>
     </Field>
   );
