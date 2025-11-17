@@ -19,7 +19,7 @@ type StoreActions = {
   setDarkMode: (darkMode: boolean) => Result<void, string>;
   setAutoClearHistory: (autoClearHistory: boolean) => Result<void, string>;
   clearUserHistory: () => Result<void, string>;
-  validateSession: () => Result<void, string>;
+  validateSession: () => Result<{ operator: Operator; bench: number }, string>;
 };
 
 type Store = {
@@ -119,7 +119,7 @@ const useStore = create<Store>()(
           if (!session.operator) return err("No operator selected");
           if (!session.bench) return err("No bench number selected");
 
-          return ok(undefined);
+          return ok({ operator: session.operator, bench: session.bench });
         },
 
         setTarget: (target: number) => {
@@ -226,7 +226,20 @@ const useStore = create<Store>()(
         },
       },
     }),
-    { name: "store", partialize: (s) => ({ context: s.context }) },
+    {
+      name: "store",
+      partialize: (s) => ({ context: s.context }),
+      onRehydrateStorage: () => {
+        return (_, error) => {
+          if (error) {
+            console.warn(
+              "Store rehydration failed, clearing and using defaults",
+            );
+            localStorage.removeItem("store");
+          }
+        };
+      },
+    },
   ),
 );
 
