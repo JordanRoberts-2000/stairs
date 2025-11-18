@@ -1,24 +1,24 @@
 import { Button } from "@/components/ui";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import SettingsIcon from "@/assets/settings.svg?react";
-import { useOperatorProfile } from "@/store";
 import SettingsDialog from "./SettingsDialog";
+import { useSession } from "@/store";
 
 const SettingsButton = ({}) => {
-  const profile = useOperatorProfile();
+  const { operator } = useSession();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="bg-neutral-800 rounded-[8px]"
-          disabled={!profile}
-          aria-disabled={!profile}
+          className="rounded-[8px] bg-neutral-800"
+          disabled={!operator}
+          aria-disabled={!operator}
         >
           <SettingsIcon className="size-7 stroke-1" />
         </Button>
       </DialogTrigger>
-      {profile && <SettingsDialog profile={profile} />}
+      {operator && <SettingsDialog operator={operator} />}
     </Dialog>
   );
 };

@@ -6,7 +6,7 @@ const treadValue = FormInputNumber((n) =>
   n
     .int("Invalid tread number")
     .min(1, "Invalid tread number")
-    .max(20, "Tread limit exceeded")
+    .max(20, "Tread limit exceeded"),
 );
 
 const treadPick = z.discriminatedUnion("kind", [
@@ -26,7 +26,7 @@ export const assemblySchema = z
       n
         .int("Invalid number")
         .min(700, "Width too small")
-        .max(1500, "Width too large")
+        .max(1500, "Width too large"),
     ),
     design: z.enum(DESIGNS),
     treads: treadSchema,

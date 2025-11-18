@@ -1,10 +1,11 @@
 import DesignIcon from "@/components/DesignIcon";
 import { GOOGLE_DESIGN_VALUES } from "@/constants";
-import { useOperatorProfile } from "@/store";
+import { useOperatorProfile, useSession } from "@/store";
 import { formatTime } from "@/utils/formatTime";
 
 const HistorySection = () => {
-  const profile = useOperatorProfile();
+  const { operator } = useSession();
+  const profile = useOperatorProfile(operator);
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">

@@ -1,57 +1,11 @@
 import { Button } from "@/components/ui";
-import { useAppForm } from "@/features/assemblyForm/hooks";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
-import { FORM_DEFAULTS, GOOGLE_DESIGN_VALUES } from "../../constants";
-import { assemblySchema } from "./schema";
-import { useActions } from "@/store";
-import { toast } from "sonner";
 import { DevTools } from "../devTools/DevToolsDialog";
 import { CustomerInput } from "./components/fields/CustomerInput";
+import { useAssemblyForm } from "./hooks/useAssemblyForm";
 
 const Form = ({}) => {
-  const { addHistoryEntry, validateSession } = useActions();
-
-  const form = useAppForm({
-    defaultValues: FORM_DEFAULTS,
-    validators: {
-      onSubmit: assemblySchema,
-      onBlur: assemblySchema,
-    },
-    onSubmit: ({ value, formApi }) => {
-      const result = validateSession();
-      if (result.isErr()) {
-        toast.error(result.error);
-        return;
-      }
-
-      const entry = assemblySchema.parse(value);
-      addHistoryEntry(entry);
-      formApi.reset();
-      toast.success(`Submitted successfully`);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      const base =
-        "https://docs.google.com/forms/d/1jE8X_JFzFmmjoTZjvxdDyJUi4A3o-063D9sOR1dTGz0/viewform";
-      const params = new URLSearchParams({
-        "entry.691366618": "17/11",
-        "entry.1725229977": result.value.operator,
-        "entry.557826237": String(result.value.bench),
-        "entry.1416759496": entry.customer,
-        "entry.1701527705": entry.site,
-        "entry.2141275577": entry.plot,
-        "entry.1294180363": GOOGLE_DESIGN_VALUES[entry.design],
-        "entry.1028831130": String(entry.treads),
-        "entry.1835744144": String(entry.wos),
-      });
-
-      const prefillUrl = `${base}?${params.toString()}`;
-      window.open(prefillUrl, "_blank", "noopener,noreferrer");
-    },
-    onSubmitInvalid: () => {
-      toast.error(`Submission failed`);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-  });
+  const form = useAssemblyForm();
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { Field, FieldError, FieldLabel, Input } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { withForm } from "../../hooks";
+import { withForm } from "../../hooks/useAppForm";
 import { FORM_DEFAULTS } from "@/constants";
 import {
   Popover,
@@ -62,7 +62,7 @@ const CustomerInput = withForm({
                   id={field.name}
                   name={field.name}
                   className={cn(
-                    "w-full rounded-[8px] border-2 px-3 py-2 text-lg shadow-md",
+                    "size-fit w-full rounded-[8px] border-2 border-neutral-500 px-3 py-2 text-lg shadow-md",
                     "border-neutral-500",
                     showTooltip && "border-orange-500 pr-10", // make room for icon
                   )}

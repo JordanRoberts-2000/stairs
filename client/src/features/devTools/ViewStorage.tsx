@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useStore } from "@/store";
+import { useStore } from "@/store/store";
 
 const ViewStorageDialog = ({ children }: { children: React.ReactElement }) => {
   const context = useStore((state) => state.context);
@@ -20,7 +20,7 @@ const ViewStorageDialog = ({ children }: { children: React.ReactElement }) => {
         <DialogHeader>
           <DialogTitle>Local Storage</DialogTitle>
         </DialogHeader>
-        <pre className="whitespace-pre rounded-2xl overflow-y-auto overflow-x-clip max-h-[60vh] border p-2 font-mono text-sm">
+        <pre className="max-h-[60vh] overflow-x-clip overflow-y-auto rounded-2xl border p-2 font-mono text-sm whitespace-pre">
           {JSON.stringify(context, null, 2)}
         </pre>
         <DialogFooter>

@@ -4,10 +4,7 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "../../../../components/ui/toggle-group";
-import { useFieldContext } from "../../hooks";
-import StraightIcon from "@/assets/design/straight.svg?react";
-import WinderIcon from "@/assets/design/winder.svg?react";
-import DoubleWinderIcon from "@/assets/design/doubleWinder.svg?react";
+import { useFieldContext } from "../../hooks/useAppForm";
 import { DESIGNS, GOOGLE_DESIGN_VALUES } from "../../../../constants";
 import { flushSync } from "react-dom";
 import DesignIcon from "@/components/DesignIcon";

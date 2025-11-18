@@ -1,8 +1,10 @@
-import { useOperatorProfile } from "@/store";
+import { useOperatorProfile, useSession } from "@/store";
 import { useEffect } from "react"; // your zustand store
 
 function DarkModeSync() {
-  const profile = useOperatorProfile();
+  const { operator } = useSession();
+  const profile = useOperatorProfile(operator);
+
   const darkMode = profile?.darkMode ?? false;
 
   useEffect(() => {

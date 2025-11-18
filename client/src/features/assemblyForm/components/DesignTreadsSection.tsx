@@ -1,5 +1,5 @@
 import { FORM_DEFAULTS, TREADS_CONFIG } from "../../../constants";
-import { withForm } from "../hooks";
+import { withForm } from "../hooks/useAppForm";
 
 const DesignTreadsSection = withForm({
   defaultValues: FORM_DEFAULTS,

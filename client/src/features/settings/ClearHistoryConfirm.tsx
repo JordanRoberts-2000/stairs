@@ -12,23 +12,20 @@ import {
 import { Button } from "@/components/ui";
 import { useActions } from "@/store";
 import { toast } from "sonner";
+import type { Operator } from "@/types";
 
-const ClearHistoryConfirm = () => {
+const ClearHistoryConfirm = ({ operator }: { operator: Operator }) => {
   const { clearUserHistory } = useActions();
 
   const handleConfirm = () => {
-    const res = clearUserHistory();
-    if (res.isOk()) {
-      toast.info("History cleared");
-    } else {
-      toast.error(res.error ?? "Failed to clear history");
-    }
+    clearUserHistory(operator);
+    toast.info("History cleared");
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="flex-1 bg-neutral-800 rounded-[8px]">
+        <Button className="flex-1 rounded-[8px] bg-neutral-800">
           Clear History
         </Button>
       </AlertDialogTrigger>

@@ -7,10 +7,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button, Field } from "@/components/ui";
 import { Label } from "@/components/ui/label";
-import { useActions } from "@/store";
+import { useActions, useOperatorProfile } from "@/store";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
-import type { OperatorProfile } from "@/types";
+import type { Operator } from "@/types";
 import ClearHistoryConfirm from "./ClearHistoryConfirm";
 import {
   Select,
@@ -20,11 +19,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type Props = { profile: OperatorProfile };
+type Props = { operator: Operator };
 
-const SettingsDialog = ({ profile }: Props) => {
+const SettingsDialog = ({ operator }: Props) => {
   const { setTarget, setAutoClearHistory, setDarkMode, setTargetEnabled } =
     useActions();
+
+  const profile = useOperatorProfile(operator);
+  if (!profile) return;
+  const { target, darkMode, autoClearHistory } = profile;
 
   return (
     <DialogContent
@@ -39,17 +42,9 @@ const SettingsDialog = ({ profile }: Props) => {
           <Field orientation={"horizontal"} className={"relative"}>
             <Label className="font-mono">Target:</Label>
             <Select
-              value={
-                profile?.target !== undefined ? String(profile.target) : "14"
-              }
-              disabled={profile?.target === undefined}
-              onValueChange={(value) => {
-                let result = setTarget(Number(value));
-                if (result.isErr()) {
-                  console.error(`Failed to set target, error: ${result.error}`);
-                  toast.error("Failed to set target");
-                }
-              }}
+              value={target !== undefined ? String(target) : "14"}
+              disabled={target === undefined}
+              onValueChange={(value) => setTarget(operator, Number(value))}
             >
               <SelectTrigger className="ml-auto h-fit w-18 gap-2 text-center">
                 <SelectValue />
@@ -63,8 +58,8 @@ const SettingsDialog = ({ profile }: Props) => {
               </SelectContent>
             </Select>
             <Switch
-              checked={profile?.target !== undefined}
-              onCheckedChange={(checked) => setTargetEnabled(checked)}
+              checked={target !== undefined}
+              onCheckedChange={(next) => setTargetEnabled(operator, next)}
               id="target-toggle"
             />
           </Field>
@@ -74,13 +69,8 @@ const SettingsDialog = ({ profile }: Props) => {
             Dark mode:
           </Label>
           <Switch
-            checked={profile.darkMode}
-            onCheckedChange={(next) => {
-              const result = setDarkMode(next);
-              if (result.isErr()) {
-                console.error("failed to toggle darkmode: ", result.error);
-              }
-            }}
+            checked={darkMode}
+            onCheckedChange={(next) => setDarkMode(operator, next)}
             id="airplane-mode"
           />
         </li>
@@ -89,22 +79,14 @@ const SettingsDialog = ({ profile }: Props) => {
             Automatic History Clearing:
           </Label>
           <Switch
-            checked={profile.autoClearHistory}
-            onCheckedChange={(next) => {
-              const result = setAutoClearHistory(next);
-              if (result.isErr()) {
-                console.error(
-                  "failed to toggle autoClearHistory: ",
-                  result.error,
-                );
-              }
-            }}
+            checked={autoClearHistory}
+            onCheckedChange={(next) => setAutoClearHistory(operator, next)}
             id="airplane-mode"
           />
         </li>
       </ul>
       <DialogFooter className="flex flex-row">
-        <ClearHistoryConfirm />
+        <ClearHistoryConfirm operator={operator} />
         <DialogClose asChild>
           <Button className="flex-1 rounded-[8px]" variant="outline">
             Close
