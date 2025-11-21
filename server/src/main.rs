@@ -1,50 +1,26 @@
 pub mod config;
 pub mod logging;
+pub mod middleware;
+pub mod routes;
 pub mod utils;
 
 use {
     crate::config::AppConfig,
-    anyhow::{Context, Result},
-    axum::{Json, Router, response::IntoResponse, routing::get},
+    anyhow::Result,
+    axum::{Router, routing::get},
     dotenvy::dotenv,
-    serde_json::json,
-    std::time::Duration,
     tokio::net::TcpListener,
-    tower::{ServiceBuilder, limit::ConcurrencyLimitLayer},
-    tower_governor::{
-        GovernorLayer, governor::GovernorConfigBuilder, key_extractor::GlobalKeyExtractor,
-    },
-    tower_http::{
-        limit::RequestBodyLimitLayer, services::ServeDir, timeout::TimeoutLayer, trace::TraceLayer,
-    },
+    tower_http::services::ServeDir,
     tracing::info,
 };
 
-async fn health_check() -> impl IntoResponse {
-    Json(json!({
-      "status": "ok",
-    }))
-}
-
 fn create_app(cfg: &AppConfig) -> Result<Router> {
-    let rate_limit_cfg = GovernorConfigBuilder::default()
-        .per_second(cfg.rate_per_second)
-        .key_extractor(GlobalKeyExtractor)
-        .burst_size(cfg.rate_burst_size)
-        .finish()
-        .context("failed to build per-IP governor config")?;
-
-    let protection_middleware = ServiceBuilder::new()
-        .layer(RequestBodyLimitLayer::new(cfg.max_body_size))
-        .layer(TimeoutLayer::new(Duration::from_secs(cfg.request_timeout_secs)))
-        .layer(ConcurrencyLimitLayer::new(cfg.max_concurrent_requests))
-        .layer(GovernorLayer::new(rate_limit_cfg));
-
     Ok(Router::new()
-        .route("/health", get(health_check))
+        .route("/health", get(routes::health_check))
         .fallback_service(ServeDir::new("public"))
-        .layer(protection_middleware)
-        .layer(TraceLayer::new_for_http()))
+        .layer(middleware::protection::layer(&cfg))
+        .layer(middleware::rate_limit::layer(&cfg)?)
+        .layer(middleware::logging::layer()))
 }
 
 #[tokio::main]
