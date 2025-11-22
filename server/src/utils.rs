@@ -3,18 +3,6 @@ use {
     tracing::{debug, warn},
 };
 
-pub fn parse_env_size(key: &str, default_mb: usize) -> usize {
-    let mb: usize = parse_env(key, default_mb);
-    let bytes = mb * 1024 * 1024;
-    debug!(
-        key = %key,
-        mb = mb,
-        bytes = bytes,
-        "Parsed size configuration"
-    );
-    bytes
-}
-
 pub fn parse_env<T>(key: &str, default: T) -> T
 where
     T: FromStr + Copy + Display,
@@ -53,5 +41,62 @@ where
             debug!(key = %key, default = %default, "Environment variable not set, using default");
             default
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use {super::*, serial_test::serial, std::env};
+
+    const KEY: &str = "TEST_PARSE_ENV";
+
+    fn clear() {
+        unsafe {
+            env::remove_var(KEY);
+        }
+    }
+
+    #[test]
+    #[serial]
+    fn returns_default_when_not_set() {
+        clear();
+        let value = parse_env(KEY, 42u16);
+        assert_eq!(value, 42);
+    }
+
+    #[test]
+    #[serial]
+    fn parses_valid_value() {
+        clear();
+        unsafe {
+            env::set_var(KEY, "8080");
+        }
+        let value = parse_env(KEY, 42u16);
+        assert_eq!(value, 8080);
+        clear();
+    }
+
+    #[test]
+    #[serial]
+    fn empty_string_uses_default() {
+        clear();
+        unsafe {
+            env::set_var(KEY, " ");
+        }
+        let value = parse_env(KEY, 42u16);
+        assert_eq!(value, 42);
+        clear();
+    }
+
+    #[test]
+    #[serial]
+    fn invalid_value_uses_default() {
+        clear();
+        unsafe {
+            env::set_var(KEY, "not-a-number");
+        }
+        let value = parse_env(KEY, 42u16);
+        assert_eq!(value, 42);
+        clear();
     }
 }

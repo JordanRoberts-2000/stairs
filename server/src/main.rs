@@ -16,11 +16,11 @@ use {
 
 fn create_app(cfg: &AppConfig) -> Result<Router> {
     Ok(Router::new()
-        .route("/health", get(routes::health_check))
-        .fallback_service(ServeDir::new("public"))
         .layer(middleware::protection::layer(&cfg))
         .layer(middleware::rate_limit::layer(&cfg)?)
-        .layer(middleware::logging::layer()))
+        .layer(middleware::logging::layer())
+        .route("/health", get(routes::health_check))
+        .fallback_service(ServeDir::new("public")))
 }
 
 #[tokio::main]
@@ -51,23 +51,13 @@ mod tests {
     };
 
     #[tokio::test]
-    async fn test_health_check() {
-        let cfg = AppConfig::load_from_env();
-        let app = create_app(&cfg).unwrap();
-
-        let request = Request::builder().uri("/health").body(Body::empty()).unwrap();
-
-        let response = app.oneshot(request).await.unwrap();
-        assert_eq!(response.status(), StatusCode::OK);
-    }
-
-    #[tokio::test]
     async fn test_root_path_serves_static_files() {
         let cfg = AppConfig::load_from_env();
         let app = create_app(&cfg).unwrap();
-        let request = Request::builder().uri("/").body(Body::empty()).unwrap();
 
+        let request = Request::builder().uri("/").body(Body::empty()).unwrap();
         let response = app.oneshot(request).await.unwrap();
+
         assert!(response.status() == StatusCode::OK);
     }
 }

@@ -1,7 +1,4 @@
-use {
-    super::utils::{parse_env, parse_env_size},
-    std::net::SocketAddr,
-};
+use {super::utils::parse_env, std::net::SocketAddr};
 
 pub struct AppConfig {
     pub port: u16,
@@ -14,17 +11,53 @@ pub struct AppConfig {
 
 impl AppConfig {
     pub fn load_from_env() -> Self {
-        Self {
-            port: parse_env("PORT", 3020),
-            max_concurrent_requests: parse_env("MAX_CONCURRENT_REQUESTS", 100),
-            request_timeout_secs: parse_env("REQUEST_TIMEOUT_SECS", 30),
-            rate_per_second: parse_env("RATE_PER_SECOND", 30),
-            rate_burst_size: parse_env("RATE_BURST_SIZE", 40),
-            max_body_size: parse_env_size("MAX_BODY_SIZE_MB", 1),
-        }
+        let port = parse_env("PORT", Self::default().port);
+        Self { port, ..Default::default() }
     }
 
     pub fn server_addr(&self) -> SocketAddr {
         SocketAddr::from(([0, 0, 0, 0], self.port))
+    }
+}
+
+impl Default for AppConfig {
+    fn default() -> Self {
+        Self {
+            port: 3020,
+            max_concurrent_requests: 100,
+            request_timeout_secs: 30,
+            rate_per_second: 30,
+            rate_burst_size: 40,
+            max_body_size: 1 * 1024 * 1024,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use {super::*, serial_test::serial, std::env};
+
+    #[test]
+    #[serial]
+    fn load_from_env_uses_default_when_port_not_set() {
+        unsafe {
+            env::remove_var("PORT");
+        }
+        let cfg = AppConfig::load_from_env();
+        assert_eq!(cfg.port, AppConfig::default().port);
+    }
+
+    #[test]
+    #[serial]
+    fn load_from_env_overrides_port_from_env() {
+        unsafe {
+            env::remove_var("PORT");
+            env::set_var("PORT", "8080");
+        }
+        let cfg = AppConfig::load_from_env();
+        assert_eq!(cfg.port, 8080);
+        unsafe {
+            env::remove_var("PORT");
+        }
     }
 }
