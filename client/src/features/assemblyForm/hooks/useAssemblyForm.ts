@@ -25,7 +25,7 @@ export function useAssemblyForm() {
 
       const historyResult = addHistoryEntry(operator, entry);
       if (historyResult.isErr()) {
-        toast.error(historyResult.error);
+        toast.error(`Adding entry failed: ${historyResult.error}`);
         return;
       }
 

@@ -17,12 +17,15 @@ const DevTools = withForm({
 
     return (
       <Popover modal={true}>
-        <PopoverTrigger className="fixed bottom-0 left-0 m-4 rounded-[8px] bg-neutral-800 p-2">
+        <PopoverTrigger className="fixed bottom-0 left-0 z-50 m-4 rounded-[8px] bg-neutral-800 p-2">
           <DevToolIcon className="size-6 text-white" />
         </PopoverTrigger>
-        <PopoverContent className="m-1 flex size-fit flex-col gap-3 rounded-[8px]">
+        <PopoverContent className="m-1 flex size-fit flex-col gap-3 rounded-[8px] px-2 py-3">
+          <div className="border-b border-neutral-600 pb-1 text-center font-mono text-lg font-semibold">
+            Devtools
+          </div>
           <ViewStorageDialog>
-            <Button className="rounded-[8px] bg-gray-300 font-mono font-semibold text-gray-900">
+            <Button className="onclick-bounce rounded-[8px] bg-gray-200 font-mono font-semibold text-gray-900">
               View Storage
             </Button>
           </ViewStorageDialog>
@@ -35,18 +38,18 @@ const DevTools = withForm({
               form.setFieldValue("plot", String(randomPlot));
               form.setFieldValue("wos", "900");
             }}
-            className="rounded-[8px] bg-gray-300 font-mono font-semibold text-gray-900"
+            className="onclick-bounce rounded-[8px] bg-gray-200 font-mono font-semibold text-gray-900"
           >
             Populate Fields
           </Button>
           <Button
-            className="rounded-[8px] bg-gray-300 font-mono font-semibold text-gray-900"
+            className="onclick-bounce rounded-[8px] bg-gray-200 font-mono font-semibold text-gray-900"
             onClick={seedEntries}
           >
             Seed Local Storage
           </Button>
           <Button
-            className="rounded-[8px] bg-gray-300 font-mono font-semibold text-gray-900"
+            className="onclick-bounce rounded-[8px] bg-gray-200 font-mono font-semibold text-gray-900"
             onClick={() => {
               localStorage.removeItem("store");
               window.location.reload();

@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.onclick-bounce:active {
+  transform: scale(0.96) translateY(1px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

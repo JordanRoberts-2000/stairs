@@ -19,7 +19,7 @@ const OneTwoCheckbox = () => {
       <span className="pointer-events-none text-xs font-semibold">1-2</span>
       <Checkbox
         checked={field.state.value}
-        className="pointer-events-none size-5 border-cyan-700 data-[state=checked]:border-cyan-900 data-[state=checked]:bg-cyan-600"
+        className="pointer-events-none size-6 border-yellow-500! text-black! transition data-[state=checked]:scale-[0.9] data-[state=checked]:bg-yellow-100"
         aria-hidden="true"
       />
     </div>

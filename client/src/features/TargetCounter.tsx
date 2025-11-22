@@ -8,13 +8,13 @@ const TargetCounter = () => {
   const count = profile?.history.length ?? 0;
   const target = profile?.target ?? 14;
 
-  if (!profile || profile.target === undefined) {
+  if (profile && profile.target === undefined) {
     // no profile or target disabled → simple icon version
     return (
-      <div className="flex">
-        <div className="ml-auto flex items-center gap-2 px-2 py-1 text-sm font-semibold text-white">
+      <div className="relative mt-2 flex items-center justify-end gap-2 border-t border-neutral-600 pt-4 text-sm font-semibold text-white">
+        <div className="absolute bottom-full mb-1 flex items-center gap-2">
           <div>{count}</div>
-          <StairsIcon className="size-8" />
+          <StairsIcon className="size-5" />
         </div>
       </div>
     );
@@ -22,8 +22,8 @@ const TargetCounter = () => {
 
   // profile + target defined → show progress bar
   return (
-    <div className="flex flex-col">
-      <div className="ml-auto px-2 py-1 text-xs font-bold">
+    <div className="relative mt-2 flex flex-col border-t border-neutral-600 pt-6">
+      <div className="absolute top-2 right-0 px-2 text-xs font-bold">
         {count} / {target}
       </div>
       <div className="mt-2 mb-2 flex h-1.5 gap-1 rounded-xl">

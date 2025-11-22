@@ -45,7 +45,7 @@ const FormNumberOfTreads = ({ design }: Props) => {
             key={tread_num}
             value={tread_num.toString()}
             style={{ viewTransitionName: `tread-group-item-${i}` }}
-            className="flex-1 overflow-clip rounded-[4px]! border-2 border-neutral-400 bg-white px-0 py-6 font-black shadow-md! data-[state=on]:border-black! data-[state=on]:bg-yellow-50!"
+            className="flex-1 overflow-clip rounded-[4px]! border-2 border-neutral-400 bg-white px-0 py-6 font-black shadow-md! transition data-[state=on]:border-black! data-[state=on]:bg-yellow-50!"
           >
             <div style={{ viewTransitionName: `tread-group-item-text-${i}` }}>
               {tread_num}

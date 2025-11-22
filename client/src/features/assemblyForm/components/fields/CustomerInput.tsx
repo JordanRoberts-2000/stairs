@@ -49,7 +49,10 @@ const CustomerInput = withForm({
           const showTooltip = shouldShowCustomerTooltip(value);
 
           return (
-            <Field data-invalid={isInvalid} className="relative">
+            <Field
+              data-invalid={isInvalid}
+              className="relative transition duration-300 focus-within:scale-[0.96]"
+            >
               <FieldLabel
                 htmlFor={field.name}
                 className="absolute top-0 left-4 z-10 w-fit! -translate-y-1/2 bg-background bg-white px-2 text-sm font-black text-black! capitalize"

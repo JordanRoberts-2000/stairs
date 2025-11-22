@@ -39,15 +39,15 @@ const SessionToggles = ({}) => {
   }, [operator, clearHistoryCheck]);
 
   return (
-    <div className="absolute top-2 left-1 flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       <Select
         value={operator ?? ""}
         onValueChange={(value: Operator) => {
           setOperator(value);
         }}
       >
-        <SelectTrigger className="flex h-6! gap-2 rounded-[8px] border-none px-2 font-mono text-xs font-semibold">
-          <Profile className="size-5 fill-white" />
+        <SelectTrigger className="onclick-bounce flex h-6! gap-2 rounded-[8px] border-none px-2 font-mono text-xs font-semibold transition duration-75">
+          <Profile className="size-4 fill-white" />
           {operator ? formatFirstNameDisplay(operator) : "Operator"}
         </SelectTrigger>
         <SelectContent className="min-w-0 -translate-x-1.5 rounded p-1 font-semibold shadow-2xl duration-300">
@@ -71,8 +71,8 @@ const SessionToggles = ({}) => {
         value={bench == undefined ? "" : String(bench)}
         onValueChange={(value) => setBench(Number(value))}
       >
-        <SelectTrigger className="flex h-6! gap-2 rounded-[8px] border-none px-2 font-mono text-xs font-semibold">
-          <Desk className="size-5 text-white" />
+        <SelectTrigger className="onclick-bounce flex h-6! gap-2 rounded-[8px] border-none px-2 font-mono text-xs font-semibold transition duration-75">
+          <Desk className="size-4 text-white" />
           <SelectValue placeholder="Bench" className="text-white" />
         </SelectTrigger>
         <SelectContent className="min-w-0 -translate-x-1.5 rounded p-1 font-semibold shadow-2xl duration-300">

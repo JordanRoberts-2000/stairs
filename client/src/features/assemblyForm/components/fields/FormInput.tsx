@@ -10,7 +10,13 @@ const FormInput = ({
 
   const isInvalid = !field.state.meta.isValid && field.state.meta.isTouched;
   return (
-    <Field data-invalid={isInvalid} className={cn("relative", className)}>
+    <Field
+      data-invalid={isInvalid}
+      className={cn(
+        "relative transition duration-300 focus-within:scale-[0.96]",
+        className,
+      )}
+    >
       <FieldLabel
         htmlFor={field.name}
         className="absolute top-0 left-4 w-fit! -translate-y-1/2 bg-background px-2 text-sm font-black text-black! capitalize"

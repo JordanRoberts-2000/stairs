@@ -19,14 +19,14 @@ export function History() {
       <SheetTrigger asChild>
         <Button
           variant="outline"
-          className="ml-auto border-0 bg-neutral-800 text-white rounded-[8px] top-2 absolute right-1 shadow-none"
+          className="onclick-bounce absolute top-2 right-1 ml-auto rounded-[8px] border-0 bg-neutral-800 text-white shadow-none"
         >
           <MenuIcon className="size-8" />
         </Button>
       </SheetTrigger>
-      <SheetContent className=" gap-0 border border-neutral-400">
-        <SheetHeader className=" m-1 rounded-[8px] bg-neutral-800">
-          <SheetTitle className="mx-auto font-black text-white! font-mono">
+      <SheetContent className="gap-0 border border-neutral-400">
+        <SheetHeader className="m-1 rounded-[8px] bg-neutral-800">
+          <SheetTitle className="mx-auto font-mono font-black text-white!">
             History
           </SheetTitle>
           <SheetDescription className="sr-only">

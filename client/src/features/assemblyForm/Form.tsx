@@ -3,6 +3,7 @@ import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { DevTools } from "../devTools/DevToolsDialog";
 import { CustomerInput } from "./components/fields/CustomerInput";
 import { useAssemblyForm } from "./hooks/useAssemblyForm";
+import { DEMO_MODE } from "@/AppConfig";
 
 const Form = ({}) => {
   const form = useAssemblyForm();
@@ -52,7 +53,7 @@ const Form = ({}) => {
           Submit
         </Button>
       </form>
-      {import.meta.env.DEV && <DevTools form={form} />}
+      {DEMO_MODE && <DevTools form={form} />}
     </>
   );
 };
