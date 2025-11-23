@@ -37,8 +37,8 @@ const SettingsDialog = ({ operator }: Props) => {
       <DialogHeader>
         <DialogTitle className="border-b pb-4 font-black">Settings</DialogTitle>
       </DialogHeader>
-      <ul className="mb-6 flex flex-col gap-8">
-        <li className="flex items-center justify-between">
+      <ul className="mb-6 flex flex-col gap-1">
+        <li className="flex items-center justify-between rounded-[8px] bg-gray-100 p-2">
           <Field orientation={"horizontal"} className={"relative"}>
             <Label className="font-mono">Target:</Label>
             <Select
@@ -64,7 +64,7 @@ const SettingsDialog = ({ operator }: Props) => {
             />
           </Field>
         </li>
-        <li className="flex items-center justify-between">
+        <li className="flex items-center justify-between rounded-[8px] bg-gray-100 px-2 py-4">
           <Label className="font-mono" htmlFor="airplane-mode">
             Dark mode:
           </Label>
@@ -74,7 +74,7 @@ const SettingsDialog = ({ operator }: Props) => {
             id="airplane-mode"
           />
         </li>
-        <li className="flex items-center justify-between">
+        <li className="flex items-center justify-between rounded-[8px] bg-gray-100 px-2 py-4">
           <Label className="font-mono" htmlFor="airplane-mode">
             Automatic History Clearing:
           </Label>

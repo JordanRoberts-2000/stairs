@@ -148,8 +148,20 @@
   }
 }
 
+::view-transition-old(submit-button),
+::view-transition-new(submit-button) {
+  height: fit-content;
+}
+
+::view-transition-old(submit-button-text),
+::view-transition-new(submit-button-text) {
+  height: 100%;
+  object-fit: none;
+}
+
 ::view-transition-old(tread-group-item-0),
 ::view-transition-new(tread-group-item-0) {
+  animation-timing-function: ease;
   height: fit-content;
 }
 
@@ -174,71 +186,41 @@
 }
 
 ::view-transition-old(tread-group-item-text-0) {
-  animation-name: vt-slide-up-fade;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-new(tread-group-item-text-0) {
-  animation-name: vt-rise-in;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-old(tread-group-item-text-1) {
-  animation-name: vt-slide-up-fade;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-new(tread-group-item-text-1) {
-  animation-name: vt-rise-in;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-old(tread-group-item-text-2) {
-  animation-name: vt-slide-up-fade;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-new(tread-group-item-text-2) {
-  animation-name: vt-rise-in;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-old(tread-group-item-text-3) {
-  animation-name: vt-slide-up-fade;
   height: 100%;
   object-fit: none;
 }
 
 ::view-transition-new(tread-group-item-text-3) {
-  animation-name: vt-rise-in;
   height: 100%;
   object-fit: none;
-}
-
-@keyframes vt-slide-up-fade {
-  from {
-    opacity: 1;
-    transform: translateX(0%);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-35%);
-  }
-}
-
-@keyframes vt-rise-in {
-  from {
-    opacity: 0;
-    transform: translateX(35%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0%);
-  }
 }

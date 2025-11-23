@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui";
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { DevTools } from "../devTools/DevToolsDialog";
 import { CustomerInput } from "./components/fields/CustomerInput";
 import { useAssemblyForm } from "./hooks/useAssemblyForm";
 import { DEMO_MODE } from "@/AppConfig";
+import { SubmitButton } from "./components/SubmitButton";
 
 const Form = ({}) => {
   const form = useAssemblyForm();
@@ -12,9 +12,9 @@ const Form = ({}) => {
     <>
       <form
         className="mx-2 mt-2 flex flex-col bg-background px-4 pt-4 pb-20"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          form.handleSubmit();
+          await form.handleSubmit();
         }}
       >
         <div className="mb-8 space-y-10 rounded-2xl bg-yellow-50/40 px-2 py-4">
@@ -22,7 +22,7 @@ const Form = ({}) => {
           <form.AppField name="site">
             {(field) => <field.Input />}
           </form.AppField>
-          <div className="flex gap-4">
+          <div className="flex gap-4 md:flex-col md:gap-10">
             <div className="relative flex-2">
               <form.AppField name="isOneTwo">
                 {(field) => <field.CheckBox />}
@@ -49,9 +49,7 @@ const Form = ({}) => {
           </div>
         </div>
         <DesignTreadsSection form={form} />
-        <Button className="mx-auto mt-8 size-fit rounded-[8px] bg-neutral-800 px-24 py-3 font-mono text-2xl">
-          Submit
-        </Button>
+        <SubmitButton form={form} />
       </form>
       {DEMO_MODE && <DevTools form={form} />}
     </>

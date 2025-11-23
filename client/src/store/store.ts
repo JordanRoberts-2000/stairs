@@ -5,14 +5,20 @@ import { createOperatorSlice, type OperatorSlice } from "./operatorSlice";
 
 export type Store = {
   context: OperatorSlice["context"] & SessionSlice["context"];
-  actions: OperatorSlice["actions"] & SessionSlice["actions"];
+  actions: OperatorSlice["actions"] &
+    SessionSlice["actions"] & {
+      setIsPosting: (value: boolean) => void;
+    };
+  ui: {
+    isPosting: boolean;
+  };
 };
 
 const useStore = create<Store>()(
   persist(
-    (...args) => {
-      const sessionSlice = createSessionSlice(...args);
-      const operatorSlice = createOperatorSlice(...args);
+    (set, get, api) => {
+      const sessionSlice = createSessionSlice(set, get, api);
+      const operatorSlice = createOperatorSlice(set, get, api);
 
       return {
         context: {
@@ -22,6 +28,16 @@ const useStore = create<Store>()(
         actions: {
           ...sessionSlice.actions,
           ...operatorSlice.actions,
+          setIsPosting: (value: boolean) =>
+            set((state) => ({
+              ui: {
+                ...state.ui,
+                isPosting: value,
+              },
+            })),
+        },
+        ui: {
+          isPosting: false,
         },
       };
     },

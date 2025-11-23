@@ -8,7 +8,7 @@ import { useFieldContext } from "../../hooks/useAppForm";
 import { DESIGNS, GOOGLE_DESIGN_VALUES } from "../../../../constants";
 import { flushSync } from "react-dom";
 import DesignIcon from "@/components/DesignIcon";
-import { startViewTransition } from "@/utils";
+import { viewTransition } from "@/utils";
 
 const DesignToggle = () => {
   const field = useFieldContext<AssemblySchemaInput["design"]>();
@@ -31,7 +31,7 @@ const DesignToggle = () => {
         value={field.state.value}
         onValueChange={(val) => {
           if (val !== field.state.value && isDesign(val))
-            startViewTransition(() => {
+            viewTransition(() => {
               flushSync(() => {
                 field.handleChange(val);
               });

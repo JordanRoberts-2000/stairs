@@ -9,11 +9,15 @@ import ViewStorageDialog from "./ViewStorage";
 import { useSeedEntries } from "./useSeedEntries";
 import { withForm } from "../assemblyForm/hooks/useAppForm";
 import { FORM_DEFAULTS } from "../../constants";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useDemoStore } from "@/store/demoStore";
 
 const DevTools = withForm({
   defaultValues: FORM_DEFAULTS,
   render: ({ form }) => {
     const { seedEntries } = useSeedEntries();
+    const { redirectOnSubmit, toggleRedirectOnSubmit } = useDemoStore();
 
     return (
       <Popover modal={true}>
@@ -57,6 +61,16 @@ const DevTools = withForm({
           >
             Clear LocalStorage
           </Button>
+          <div className="flex items-center justify-between gap-4 border-t border-neutral-600 pt-2">
+            <Label className="font-mono text-sm" htmlFor="airplane-mode">
+              Redirect on submit:
+            </Label>
+            <Switch
+              checked={redirectOnSubmit}
+              onCheckedChange={toggleRedirectOnSubmit}
+              id="airplane-mode"
+            />
+          </div>
         </PopoverContent>
       </Popover>
     );

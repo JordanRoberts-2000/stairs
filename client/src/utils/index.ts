@@ -1,3 +1,4 @@
-import { startViewTransition } from "./viewTransition";
+import scrollToTop from "./scrollToTop";
+import { viewTransition } from "./viewTransition";
 
-export { startViewTransition };
+export { viewTransition, scrollToTop };

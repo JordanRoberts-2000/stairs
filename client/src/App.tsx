@@ -3,19 +3,22 @@ import Header from "./components/Header";
 import { Toaster } from "./components/ui/sonner";
 import DarkModeSync from "./utils/DarkModeSync";
 import { useVisibilityClearHistoryCheck } from "./hooks/useVisibilityClearHistoryCheck";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   useVisibilityClearHistoryCheck();
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <DarkModeSync />
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col border-x-2 border-neutral-800 bg-background">
         <Header />
         <Form />
         <Toaster duration={2000} />
       </div>
-    </>
+    </QueryClientProvider>
   );
 }
 
