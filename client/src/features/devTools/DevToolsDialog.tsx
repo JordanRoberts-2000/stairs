@@ -37,6 +37,7 @@ const DevTools = withForm({
               form.setFieldValue("site", "blakesley");
               form.setFieldValue("plot", String(randomPlot));
               form.setFieldValue("wos", "900");
+              form.fieldInfo.wos.instance?.handleBlur(); // hack until this bug is fixed: https://github.com/TanStack/form/issues/1865
             }}
             className="onclick-bounce rounded-[8px] bg-gray-200 font-mono font-semibold text-gray-900"
           >
