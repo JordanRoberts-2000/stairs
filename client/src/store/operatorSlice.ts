@@ -22,6 +22,7 @@ type OperatorActions = {
   setDarkMode: (operator: Operator, enabled: boolean) => void;
   setAutoClearHistory: (operator: Operator, autoClearHistory: boolean) => void;
 
+  isDuplicateEntry: (operator: Operator, entry: AssemblySchema) => boolean;
   addHistoryEntry: (
     operator: Operator,
     entry: AssemblySchema,
@@ -120,16 +121,20 @@ export const createOperatorSlice: StateCreator<
       }));
     },
 
+    isDuplicateEntry(operator: Operator, entry: AssemblySchema): boolean {
+      const profile = get().actions.getProfile(operator);
+
+      return profile.history.some((historyEntry) => {
+        const { timestamp: _ignored, ...rest } = historyEntry;
+        return JSON.stringify(rest) === JSON.stringify(entry);
+      });
+    },
+
     addHistoryEntry: (operator: Operator, entry: AssemblySchema) => {
       const profile = get().actions.getProfile(operator);
       if (profile.history.length >= 100) return err("History limit exceeded");
 
-      const isDuplicate = profile.history.some((historyEntry) => {
-        const { timestamp: _ignored, ...rest } = historyEntry;
-        return JSON.stringify(rest) === JSON.stringify(entry);
-      });
-
-      if (isDuplicate) {
+      if (get().actions.isDuplicateEntry(operator, entry)) {
         return err("Entry already entered");
       }
 
