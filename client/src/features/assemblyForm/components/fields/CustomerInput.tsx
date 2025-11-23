@@ -7,12 +7,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useOperatorProfile, useSession } from "@/store";
+import { viewTransition } from "@/utils";
+import { flushSync } from "react-dom";
 
 const shouldShowCustomerTooltip = (raw: unknown): boolean => {
-  const value = String(raw ?? "")
-    .trim()
-    .toLowerCase();
+  const rawStr = String(raw ?? "");
+  const beforeAt = rawStr.split("@")[0] ?? "";
 
+  const value = beforeAt.trim().toLowerCase();
   if (!value) return false;
 
   const normalized = value.replace(/[\s.'"]/g, "");
@@ -40,6 +43,9 @@ const shouldShowCustomerTooltip = (raw: unknown): boolean => {
 const CustomerInput = withForm({
   defaultValues: FORM_DEFAULTS,
   render: ({ form }) => {
+    const { operator } = useSession();
+    const profile = useOperatorProfile(operator);
+
     return (
       <form.AppField name="customer">
         {(field) => {
@@ -70,7 +76,7 @@ const CustomerInput = withForm({
                     showTooltip && "border-orange-500 pr-10", // make room for icon
                   )}
                   aria-invalid={isInvalid}
-                  inputMode="url"
+                  inputMode="email"
                   value={value}
                   autoCorrect="off"
                   autoCapitalize="off"
@@ -79,8 +85,37 @@ const CustomerInput = withForm({
                     field.handleBlur();
                     const v = field.state.value as string | undefined;
 
-                    if (v && v.includes("/")) {
-                      const parts = v.split("/").map((part) => part.trim());
+                    if (v === "@" && profile) {
+                      const history = profile.history;
+
+                      if (history.length > 0) {
+                        const last = history[history.length - 1];
+                        if (!last) return;
+
+                        viewTransition(() => {
+                          flushSync(() => {
+                            form.setFieldValue("customer", last.customer);
+                            form.validateField("customer", "submit");
+
+                            form.setFieldValue("site", last.site);
+                            form.validateField("site", "submit");
+
+                            form.setFieldValue("wos", String(last.wos));
+                            form.validateField("wos", "submit");
+                            form.setFieldValue("design", last.design);
+                            form.setFieldValue("treads", {
+                              kind: "custom",
+                              value: String(last.treads),
+                            });
+                          });
+                        });
+
+                        return;
+                      }
+                    }
+
+                    if (v && v.includes("@")) {
+                      const parts = v.split("@").map((part) => part.trim());
 
                       if (parts.length >= 1 && parts[0]) {
                         form.setFieldValue("customer", parts[0]);

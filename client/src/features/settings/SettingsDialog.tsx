@@ -31,6 +31,7 @@ const SettingsDialog = ({ operator }: Props) => {
 
   return (
     <DialogContent
+      aria-describedby={undefined}
       onOpenAutoFocus={(e) => e.preventDefault()}
       className="rounded-2xl sm:max-w-[425px]"
     >

@@ -46,7 +46,7 @@ export function useAssemblyForm() {
         "entry.1835744144": String(entry.wos),
       });
       const prefillUrl = `${base}?${params.toString()}`;
-      // window.open(prefillUrl, "_blank", "noopener,noreferrer");
+      window.open(prefillUrl, "_blank", "noopener,noreferrer");
       // ==========================
 
       await mutateAsync({ operator, bench, entry, formApi });
