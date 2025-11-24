@@ -30,25 +30,6 @@ export function useAssemblyForm() {
         return;
       }
 
-      // todo: temporary - remove this
-      // ==========================
-      const base =
-        "https://docs.google.com/forms/d/1jE8X_JFzFmmjoTZjvxdDyJUi4A3o-063D9sOR1dTGz0/viewform";
-      const params = new URLSearchParams({
-        "entry.691366618": "24/11",
-        "entry.1725229977": operator,
-        "entry.557826237": String(bench),
-        "entry.1416759496": entry.customer,
-        "entry.1701527705": entry.site,
-        "entry.2141275577": entry.plot,
-        "entry.1294180363": GOOGLE_DESIGN_VALUES[entry.design],
-        "entry.1028831130": String(entry.treads),
-        "entry.1835744144": String(entry.wos),
-      });
-      const prefillUrl = `${base}?${params.toString()}`;
-      window.open(prefillUrl, "_blank", "noopener,noreferrer");
-      // ==========================
-
       await mutateAsync({ operator, bench, entry, formApi });
     },
     onSubmitInvalid: () => {

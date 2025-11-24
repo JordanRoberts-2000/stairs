@@ -18,7 +18,7 @@ export const client = {
         return;
       }
 
-      await api.post("/assembly", { operator, bench, ...entry });
+      await api.post("/assembly/form", { operator, bench, ...entry });
     },
   },
   operators: {

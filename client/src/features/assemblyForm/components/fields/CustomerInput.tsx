@@ -13,6 +13,7 @@ import { flushSync } from "react-dom";
 
 const shouldShowCustomerTooltip = (raw: unknown): boolean => {
   const rawStr = String(raw ?? "");
+
   const beforeAt = rawStr.split("@")[0] ?? "";
 
   const value = beforeAt.trim().toLowerCase();

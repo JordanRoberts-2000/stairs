@@ -7,6 +7,10 @@ async function handleResponse(response: Response) {
       error.message || `HTTP ${response.status}: ${response.statusText}`,
     );
   }
+  if (response.status === 204 || response.status === 205) {
+    return;
+  }
+
   return response.json();
 }
 

@@ -1,3 +1,4 @@
+mod assembly_form;
 mod health;
 
-pub use health::health_check;
+pub use {assembly_form::assembly_form, health::health_check};

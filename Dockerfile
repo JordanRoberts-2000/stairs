@@ -3,7 +3,7 @@ WORKDIR /app
 COPY client/package*.json ./
 RUN npm ci
 COPY client/ ./
-RUN npm run build
+RUN npm run build:demo
 
 FROM rust:1.88 AS server
 WORKDIR /app

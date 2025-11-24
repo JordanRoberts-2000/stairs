@@ -1,13 +1,17 @@
 pub mod config;
 pub mod logging;
 pub mod middleware;
+pub mod models;
 pub mod routes;
 pub mod utils;
 
 use {
     crate::config::AppConfig,
     anyhow::Result,
-    axum::{Router, routing::get},
+    axum::{
+        Router,
+        routing::{get, post},
+    },
     dotenvy::dotenv,
     tokio::net::TcpListener,
     tower_http::services::ServeDir,
@@ -19,7 +23,12 @@ fn create_app(cfg: &AppConfig) -> Result<Router> {
         .layer(middleware::protection::layer(&cfg))
         .layer(middleware::rate_limit::layer(&cfg)?)
         .layer(middleware::logging::layer())
-        .route("/health", get(routes::health_check))
+        .nest(
+            "/api",
+            Router::new()
+                .route("/health", get(routes::health_check))
+                .route("/assembly/form", post(routes::assembly_form)),
+        )
         .fallback_service(ServeDir::new("public")))
 }
 

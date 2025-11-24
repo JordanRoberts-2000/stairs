@@ -51,7 +51,7 @@ const Form = ({}) => {
         <DesignTreadsSection form={form} />
         <SubmitButton form={form} />
       </form>
-      {DEMO_MODE && <DevTools form={form} />}
+      {(DEMO_MODE || import.meta.env.DEV) && <DevTools form={form} />}
     </>
   );
 };
