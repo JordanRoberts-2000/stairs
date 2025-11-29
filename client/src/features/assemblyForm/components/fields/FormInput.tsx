@@ -6,6 +6,7 @@ const FormInput = ({
   className,
   inputClassName,
   onBlur,
+  onFocus,
   children,
   ...attr
 }: React.InputHTMLAttributes<HTMLInputElement> & {
@@ -13,8 +14,8 @@ const FormInput = ({
   inputClassName?: string;
 }) => {
   const field = useFieldContext<string>();
-
   const isInvalid = !field.state.meta.isValid && field.state.meta.isTouched;
+
   return (
     <Field
       data-invalid={isInvalid}
@@ -40,6 +41,9 @@ const FormInput = ({
         onBlur={(e) => {
           field.handleBlur();
           onBlur?.(e);
+        }}
+        onFocus={(e) => {
+          onFocus?.(e);
         }}
         value={field.state.value}
         autoCorrect="off"

@@ -1,11 +1,11 @@
 import { withForm } from "../../hooks/useAppForm";
 import { FIELD_DELIMITER, FORM_DEFAULTS } from "@/constants";
 import { useOperatorProfile, useSession } from "@/store";
-import { viewTransition } from "@/utils";
-import { flushSync } from "react-dom";
 import WarningTooltip from "../WarningTooltip";
 import type { AnyFormApi } from "@tanstack/react-form";
 import type { OperatorProfile } from "@/types";
+import AutoCompletePopover from "@/features/autoComplete/autoCompletePopover";
+import { useState } from "react";
 
 const shouldShowWarning = (raw: string): boolean => {
   const input = (raw.split("@")[0] ?? "")
@@ -50,29 +50,27 @@ const handleHistoryShortcut = (
   const parts = value.split(FIELD_DELIMITER).filter(Boolean);
   const [newPlot, newWos] = parts.map((p) => p.trim()).filter(Boolean);
 
-  viewTransition(() => {
-    form.setFieldValue("customer", last.customer);
-    form.validateField("customer", "submit");
+  form.setFieldValue("customer", last.customer);
+  form.validateField("customer", "submit");
 
-    form.setFieldValue("site", last.site);
-    form.validateField("site", "submit");
+  form.setFieldValue("site", last.site);
+  form.validateField("site", "submit");
 
-    form.setFieldValue("design", last.design);
+  form.setFieldValue("design", last.design);
 
-    form.setFieldValue("treads", {
-      kind: "custom",
-      value: String(last.treads),
-    });
-
-    if (newPlot) {
-      form.setFieldValue("plot", newPlot);
-      form.validateField("plot", "submit");
-    }
-
-    const wosValue = newWos || String(last.wos);
-    form.setFieldValue("wos", wosValue);
-    form.validateField("wos", "submit");
+  form.setFieldValue("treads", {
+    kind: "custom",
+    value: String(last.treads),
   });
+
+  if (newPlot) {
+    form.setFieldValue("plot", newPlot);
+    form.validateField("plot", "submit");
+  }
+
+  const wosValue = newWos || String(last.wos);
+  form.setFieldValue("wos", wosValue);
+  form.validateField("wos", "submit");
 };
 
 const CustomerInput = withForm({
@@ -80,24 +78,35 @@ const CustomerInput = withForm({
   render: ({ form }) => {
     const { operator } = useSession();
     const profile = useOperatorProfile(operator);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     return (
       <form.AppField name="customer">
         {(field) => {
           const value = field.state.value;
           const showWarning = shouldShowWarning(value);
+
           return (
-            <field.Input
-              inputMode="email"
-              inputClassName={showWarning ? "border-orange-500!" : ""}
-              onBlur={() => {
-                handleFormShortcut(value, form);
-                handleHistoryShortcut(value, profile, form);
+            <AutoCompletePopover
+              open={isPopoverOpen}
+              selectAutocomplete={(val) => {
+                field.setValue(val);
+                setIsPopoverOpen(false);
               }}
             >
-              {showWarning && <WarningTooltip />}
-              {/* <AutoCompletePopover /> */}
-            </field.Input>
+              <field.Input
+                inputMode="email"
+                inputClassName={showWarning ? "border-orange-500!" : ""}
+                onFocus={() => setIsPopoverOpen(true)}
+                onBlur={() => {
+                  setIsPopoverOpen(false);
+                  handleFormShortcut(value, form);
+                  handleHistoryShortcut(value, profile, form);
+                }}
+              >
+                <WarningTooltip />
+              </field.Input>
+            </AutoCompletePopover>
           );
         }}
       </form.AppField>
