@@ -11,9 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useClearHistoryCheck } from "@/utils/clearHistoryCheck";
-import { type Operator } from "@/types";
 import { useEffect } from "react";
-import { OPERATORS } from "@/constants";
+import { useOperators } from "@/hooks/useOperators";
+import { Spinner } from "@/components/Spinner";
+import { toast } from "sonner";
 
 const DISPLAY_NAME_FIXES: Record<string, string> = {
   "Jordon Roberts": "Jordan Roberts",
@@ -32,17 +33,25 @@ const SessionToggles = ({}) => {
   const { setBench, setOperator } = useActions();
   const { operator, bench } = useSession();
   const clearHistoryCheck = useClearHistoryCheck();
+  const { isLoading, data: operators, error } = useOperators();
 
   useEffect(() => {
     if (!operator) return;
     clearHistoryCheck();
   }, [operator, clearHistoryCheck]);
 
+  if (isLoading) return <Spinner />;
+  if (error) {
+    toast.error("Failed to fetch operaters");
+    console.error("Failed to fetch operators:", error);
+    return <div>Failed to fetch operaters</div>;
+  }
+
   return (
     <div className="flex flex-col gap-1">
       <Select
         value={operator ?? ""}
-        onValueChange={(value: Operator) => {
+        onValueChange={(value) => {
           setOperator(value);
         }}
       >
@@ -55,7 +64,7 @@ const SessionToggles = ({}) => {
             <SelectLabel className="text-center font-mono text-xs">
               Operator
             </SelectLabel>
-            {OPERATORS.map((operator) => (
+            {operators?.map((operator) => (
               <SelectItem
                 key={operator}
                 value={operator}

@@ -1,5 +1,5 @@
 import type { AssemblySchema } from "@/features/assemblyForm/schema";
-import type { Entry, Operator, OperatorProfile } from "@/types";
+import type { Entry, OperatorProfile } from "@/types";
 import { err, ok, type Result } from "neverthrow";
 import type { StateCreator } from "zustand";
 
@@ -12,24 +12,24 @@ const DEFAULT_PROFILE: OperatorProfile = {
 };
 
 type OperatorContext = {
-  profiles: Partial<Record<Operator, OperatorProfile>>;
+  profiles: Partial<Record<string, OperatorProfile>>;
 };
 
 type OperatorActions = {
-  getProfile: (operator: Operator) => OperatorProfile;
+  getProfile: (operator: string) => OperatorProfile;
 
-  setTarget: (operator: Operator, target: number) => void;
-  setTargetEnabled: (operator: Operator, enabled: boolean) => void;
-  setDarkMode: (operator: Operator, enabled: boolean) => void;
-  setAutoClearHistory: (operator: Operator, autoClearHistory: boolean) => void;
-  setAutoComplete: (operator: Operator, autoComplete: boolean) => void;
+  setTarget: (operator: string, target: number) => void;
+  setTargetEnabled: (operator: string, enabled: boolean) => void;
+  setDarkMode: (operator: string, enabled: boolean) => void;
+  setAutoClearHistory: (operator: string, autoClearHistory: boolean) => void;
+  setAutoComplete: (operator: string, autoComplete: boolean) => void;
 
-  isDuplicateEntry: (operator: Operator, entry: AssemblySchema) => boolean;
+  isDuplicateEntry: (operator: string, entry: AssemblySchema) => boolean;
   addHistoryEntry: (
-    operator: Operator,
+    operator: string,
     entry: AssemblySchema,
   ) => Result<void, string>;
-  clearUserHistory: (operator: Operator) => void;
+  clearUserHistory: (operator: string) => void;
 };
 
 export type OperatorSlice = {
@@ -64,7 +64,7 @@ export const createOperatorSlice: StateCreator<
       return DEFAULT_PROFILE;
     },
 
-    setTarget: (operator: Operator, target: number) => {
+    setTarget: (operator: string, target: number) => {
       const profile = get().actions.getProfile(operator);
 
       set((state) => ({
@@ -78,7 +78,7 @@ export const createOperatorSlice: StateCreator<
       }));
     },
 
-    setTargetEnabled: (operator: Operator, enabled: boolean) => {
+    setTargetEnabled: (operator: string, enabled: boolean) => {
       const profile = get().actions.getProfile(operator);
 
       set((state) => ({
@@ -95,7 +95,7 @@ export const createOperatorSlice: StateCreator<
       }));
     },
 
-    setDarkMode: (operator: Operator, enabled: boolean) => {
+    setDarkMode: (operator: string, enabled: boolean) => {
       const profile = get().actions.getProfile(operator);
 
       set((state) => ({
@@ -109,7 +109,7 @@ export const createOperatorSlice: StateCreator<
       }));
     },
 
-    setAutoClearHistory: (operator: Operator, autoClearHistory: boolean) => {
+    setAutoClearHistory: (operator: string, autoClearHistory: boolean) => {
       const profile = get().actions.getProfile(operator);
 
       set((state) => ({
@@ -137,7 +137,7 @@ export const createOperatorSlice: StateCreator<
       }));
     },
 
-    isDuplicateEntry(operator: Operator, entry: AssemblySchema): boolean {
+    isDuplicateEntry(operator: string, entry: AssemblySchema): boolean {
       const profile = get().actions.getProfile(operator);
 
       return profile.history.some((historyEntry) => {
@@ -146,7 +146,7 @@ export const createOperatorSlice: StateCreator<
       });
     },
 
-    addHistoryEntry: (operator: Operator, entry: AssemblySchema) => {
+    addHistoryEntry: (operator: string, entry: AssemblySchema) => {
       const profile = get().actions.getProfile(operator);
       if (profile.history.length >= 100) return err("History limit exceeded");
 
@@ -172,7 +172,7 @@ export const createOperatorSlice: StateCreator<
       return ok(undefined);
     },
 
-    clearUserHistory: (operator: Operator) => {
+    clearUserHistory: (operator: string) => {
       const profile = get().actions.getProfile(operator);
 
       set((state) => ({

@@ -9,7 +9,6 @@ import { Button, Field } from "@/components/ui";
 import { Label } from "@/components/ui/label";
 import { useActions, useOperatorProfile } from "@/store";
 import { Switch } from "@/components/ui/switch";
-import type { Operator } from "@/types";
 import ClearHistoryConfirm from "./ClearHistoryConfirm";
 import {
   Select,
@@ -19,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type Props = { operator: Operator };
+type Props = { operator: string };
 
 const SettingsDialog = ({ operator }: Props) => {
   const {

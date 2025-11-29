@@ -32,29 +32,6 @@ export const FORM_DEFAULTS = {
 
 export const FIELD_DELIMITER = "@";
 
-export const OPERATORS = [
-  // "Owen Henderson",
-  "Jordon Roberts",
-  // "Thomas Hopkins",
-  "Sadman Rafid",
-  // "Jermaine Arthur",
-  // "Kasper Grudzinski",
-  // "Adam Belc",
-  // "Steven Waldren",
-  // "Marian Dziemba",
-  // "Kyle Leighton",
-  // "Tristian Anderson",
-  // "Guntis Lapins",
-  // "Patrica Haidau",
-  // "Pawel Baryla",
-  // "BLAZEJ MROZINSKI",
-  // "Jake Spicer",
-  // "Kevin King",
-  // "Lukasz Wierzbicki",
-  // "Marcus",
-  // "Lewis",
-] as const;
-
 export const BENCH_NUMBERS = new Set(
   Array.from({ length: 12 }, (_, i) => i + 1),
 );

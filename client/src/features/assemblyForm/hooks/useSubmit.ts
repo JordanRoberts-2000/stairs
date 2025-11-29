@@ -3,12 +3,12 @@ import type { AssemblySchema } from "../schema";
 import type { AnyFormApi } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { useActions } from "@/store";
-import type { Operator } from "@/types";
 import { scrollToTop, viewTransition } from "@/utils";
-import { client } from "@/lib/client";
+import { api } from "@/api";
+import type { ApiError } from "@/api/client";
 
 type SubmitPayload = {
-  operator: Operator;
+  operator: string;
   bench: number;
   entry: AssemblySchema;
   formApi: AnyFormApi;
@@ -17,11 +17,11 @@ type SubmitPayload = {
 export function useSubmit() {
   const { addHistoryEntry, setIsPosting } = useActions();
 
-  const mutation = useMutation<void, Error, SubmitPayload>({
+  const mutation = useMutation<void, ApiError, SubmitPayload>({
     mutationKey: ["assembly", "submit"],
     mutationFn: async ({ operator, bench, entry }) => {
       const transitionPromise = viewTransition(() => setIsPosting(true));
-      const fetchPromise = client.assembly.submit({ operator, bench, entry });
+      const fetchPromise = api.assembly.submit({ operator, bench, entry });
 
       await transitionPromise;
 
@@ -46,7 +46,13 @@ export function useSubmit() {
     },
     onError: async (error) => {
       await viewTransition(() => setIsPosting(false));
-      toast.info("Submission failed, please try again");
+
+      if (error.type === "HttpError" && error.status === 0) {
+        toast.error("Network error. Check your connection.");
+      } else {
+        toast.error("Submission failed, please try again");
+      }
+
       console.error("Submission failed: ", error);
     },
   });
