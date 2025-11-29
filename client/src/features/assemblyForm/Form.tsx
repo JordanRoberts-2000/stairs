@@ -1,13 +1,12 @@
 import { DesignTreadsSection } from "./components/DesignTreadsSection";
 import { DevTools } from "../devTools/DevToolsDialog";
-import { CustomerInput } from "./components/fields/CustomerInput";
 import { useAssemblyForm } from "./hooks/useAssemblyForm";
 import { DEMO_MODE } from "@/AppConfig";
 import { SubmitButton } from "./components/SubmitButton";
+import { CustomerDetailsSection } from "./components/CustomerDetailsSection";
 
 const Form = ({}) => {
   const form = useAssemblyForm();
-
   return (
     <>
       <form
@@ -17,37 +16,7 @@ const Form = ({}) => {
           await form.handleSubmit();
         }}
       >
-        <div className="mb-8 space-y-10 rounded-2xl bg-yellow-50/40 px-2 py-4">
-          <CustomerInput form={form} />
-          <form.AppField name="site">
-            {(field) => <field.Input />}
-          </form.AppField>
-          <div className="flex gap-4 md:flex-col md:gap-10">
-            <div className="relative flex-2">
-              <form.AppField name="isOneTwo">
-                {(field) => <field.CheckBox />}
-              </form.AppField>
-              <form.AppField name="plot">
-                {(field) => (
-                  <field.Input
-                    inputMode="numeric"
-                    className="w-full"
-                    maxLength={3}
-                  />
-                )}
-              </form.AppField>
-            </div>
-            <form.AppField name="wos">
-              {(field) => (
-                <field.Input
-                  inputMode="numeric"
-                  className="flex-1"
-                  maxLength={4}
-                />
-              )}
-            </form.AppField>
-          </div>
-        </div>
+        <CustomerDetailsSection form={form} />
         <DesignTreadsSection form={form} />
         <SubmitButton form={form} />
       </form>

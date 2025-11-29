@@ -30,6 +30,8 @@ export const FORM_DEFAULTS = {
   },
 } satisfies AssemblySchemaInput as AssemblySchemaInput;
 
+export const FIELD_DELIMITER = "@";
+
 export const OPERATORS = [
   // "Owen Henderson",
   "Jordon Roberts",

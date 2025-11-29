@@ -1,44 +1,78 @@
-import { Field, FieldError, FieldLabel, Input } from "@/components/ui";
-import { cn } from "@/lib/utils";
 import { withForm } from "../../hooks/useAppForm";
-import { FORM_DEFAULTS } from "@/constants";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { FIELD_DELIMITER, FORM_DEFAULTS } from "@/constants";
 import { useOperatorProfile, useSession } from "@/store";
 import { viewTransition } from "@/utils";
 import { flushSync } from "react-dom";
+import WarningTooltip from "../WarningTooltip";
+import type { AnyFormApi } from "@tanstack/react-form";
+import type { OperatorProfile } from "@/types";
 
-const shouldShowCustomerTooltip = (raw: unknown): boolean => {
-  const rawStr = String(raw ?? "");
+const shouldShowWarning = (raw: string): boolean => {
+  const input = (raw.split("@")[0] ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s.'"]/g, "");
 
-  const beforeAt = rawStr.split("@")[0] ?? "";
+  if (!input) return false;
 
-  const value = beforeAt.trim().toLowerCase();
-  if (!value) return false;
+  const triggers = ["dw", "david", "davidwilson", "barratt", "barrat"];
+  return triggers.some((trigger) => input.includes(trigger));
+};
 
-  const normalized = value.replace(/[\s.'"]/g, "");
+const handleFormShortcut = (value: string, form: AnyFormApi) => {
+  if (!value?.includes(FIELD_DELIMITER)) return;
 
-  const targets = new Set(
-    [
-      "dw'",
-      "d w",
-      "d.w",
-      "david",
-      "david wilson",
-      "david.wilson",
-      "barratt",
-      "barrat",
-    ].map((s) => s.toLowerCase()),
-  );
+  const [customer, site, plot, wos] = value
+    .split(FIELD_DELIMITER)
+    .map((part) => part.trim())
+    .filter(Boolean);
 
-  const normalizedTargets = new Set(
-    Array.from(targets).map((s) => s.replace(/[\s.'"]/g, "")),
-  );
+  const fields = { customer, site, plot, wos };
 
-  return targets.has(value) || normalizedTargets.has(normalized);
+  Object.entries(fields).forEach(([name, value]) => {
+    if (value) {
+      form.setFieldValue(name, value);
+      form.validateField(name, "submit");
+    }
+  });
+};
+
+const handleHistoryShortcut = (
+  value: string,
+  profile: OperatorProfile | null,
+  form: AnyFormApi,
+) => {
+  if (!value.startsWith(FIELD_DELIMITER) || !profile?.history.length) return;
+
+  const last = profile.history[profile.history.length - 1];
+  if (!last) return;
+
+  const parts = value.split(FIELD_DELIMITER).filter(Boolean);
+  const [newPlot, newWos] = parts.map((p) => p.trim()).filter(Boolean);
+
+  viewTransition(() => {
+    form.setFieldValue("customer", last.customer);
+    form.validateField("customer", "submit");
+
+    form.setFieldValue("site", last.site);
+    form.validateField("site", "submit");
+
+    form.setFieldValue("design", last.design);
+
+    form.setFieldValue("treads", {
+      kind: "custom",
+      value: String(last.treads),
+    });
+
+    if (newPlot) {
+      form.setFieldValue("plot", newPlot);
+      form.validateField("plot", "submit");
+    }
+
+    const wosValue = newWos || String(last.wos);
+    form.setFieldValue("wos", wosValue);
+    form.validateField("wos", "submit");
+  });
 };
 
 const CustomerInput = withForm({
@@ -50,133 +84,20 @@ const CustomerInput = withForm({
     return (
       <form.AppField name="customer">
         {(field) => {
-          const value = field.state.value ?? "";
-          const isInvalid =
-            !field.state.meta.isValid && field.state.meta.isTouched;
-          const showTooltip = shouldShowCustomerTooltip(value);
-
+          const value = field.state.value;
+          const showWarning = shouldShowWarning(value);
           return (
-            <Field
-              data-invalid={isInvalid}
-              className="relative transition duration-300 focus-within:scale-[0.96]"
+            <field.Input
+              inputMode="email"
+              inputClassName={showWarning ? "border-orange-500!" : ""}
+              onBlur={() => {
+                handleFormShortcut(value, form);
+                handleHistoryShortcut(value, profile, form);
+              }}
             >
-              <FieldLabel
-                htmlFor={field.name}
-                className="absolute top-0 left-4 z-10 w-fit! -translate-y-1/2 bg-background bg-white px-2 text-sm font-black text-black! capitalize"
-              >
-                {field.name}
-              </FieldLabel>
-
-              <div className="relative">
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  className={cn(
-                    "size-fit w-full rounded-[8px] border-2 border-neutral-500 px-3 py-2 text-lg shadow-md",
-                    "border-neutral-500",
-                    showTooltip && "border-orange-500 pr-10", // make room for icon
-                  )}
-                  aria-invalid={isInvalid}
-                  inputMode="email"
-                  value={value}
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  onBlur={() => {
-                    field.handleBlur();
-                    const v = field.state.value as string | undefined;
-
-                    if (v === "@" && profile) {
-                      const history = profile.history;
-
-                      if (history.length > 0) {
-                        const last = history[history.length - 1];
-                        if (!last) return;
-
-                        viewTransition(() => {
-                          flushSync(() => {
-                            form.setFieldValue("customer", last.customer);
-                            form.validateField("customer", "submit");
-
-                            form.setFieldValue("site", last.site);
-                            form.validateField("site", "submit");
-
-                            form.setFieldValue("wos", String(last.wos));
-                            form.validateField("wos", "submit");
-                            form.setFieldValue("design", last.design);
-                            form.setFieldValue("treads", {
-                              kind: "custom",
-                              value: String(last.treads),
-                            });
-                          });
-                        });
-
-                        return;
-                      }
-                    }
-
-                    if (v && v.includes("@")) {
-                      const parts = v.split("@").map((part) => part.trim());
-
-                      if (parts.length >= 1 && parts[0]) {
-                        form.setFieldValue("customer", parts[0]);
-                        form.validateField("customer", "submit");
-                      }
-                      if (parts.length >= 2 && parts[1]) {
-                        form.setFieldValue("site", parts[1]);
-                        form.validateField("site", "submit");
-                      }
-                      if (parts.length >= 3 && parts[2]) {
-                        form.setFieldValue("plot", parts[2]);
-                        form.validateField("plot", "submit");
-                      }
-                      if (parts.length >= 4 && parts[3]) {
-                        form.setFieldValue("wos", parts[3]);
-                        form.validateField("wos", "submit");
-                      }
-                    }
-                  }}
-                  onChange={(e) => {
-                    // Clear errors as soon as user edits again
-                    field.setMeta((m) => ({
-                      ...m,
-                      errors: [],
-                      errorMap: {},
-                    }));
-                    field.handleChange(e.target.value);
-                  }}
-                />
-
-                {showTooltip && (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className="pointer-events-auto absolute inset-y-0 right-3 my-auto flex size-6 items-center justify-center rounded-full border border-orange-500 bg-orange-100 text-xs font-bold text-orange-600"
-                      >
-                        !
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      side="top"
-                      align="end"
-                      className="max-w-xs text-xs"
-                    >
-                      'Barratt' and 'David Wilson'{" "}
-                      <span className="font-bold">winder</span> stairs must have
-                      corner blocks on the back of the risers
-                    </PopoverContent>
-                  </Popover>
-                )}
-              </div>
-
-              {isInvalid && (
-                <FieldError
-                  className="absolute bottom-0 translate-y-full pt-1 pr-2 text-xs font-bold"
-                  errors={field.state.meta.errors}
-                />
-              )}
-            </Field>
+              {showWarning && <WarningTooltip />}
+              {/* <AutoCompletePopover /> */}
+            </field.Input>
           );
         }}
       </form.AppField>
