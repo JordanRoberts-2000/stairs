@@ -11,5 +11,6 @@ export type OperatorProfile = {
   target?: number;
   history: Entry[];
   autoClearHistory: boolean;
+  autoComplete: boolean;
   darkMode: boolean;
 };

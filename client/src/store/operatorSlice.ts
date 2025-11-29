@@ -6,6 +6,7 @@ import type { StateCreator } from "zustand";
 const DEFAULT_PROFILE: OperatorProfile = {
   target: 14,
   autoClearHistory: true,
+  autoComplete: true,
   darkMode: false,
   history: [],
 };
@@ -21,6 +22,7 @@ type OperatorActions = {
   setTargetEnabled: (operator: Operator, enabled: boolean) => void;
   setDarkMode: (operator: Operator, enabled: boolean) => void;
   setAutoClearHistory: (operator: Operator, autoClearHistory: boolean) => void;
+  setAutoComplete: (operator: Operator, autoComplete: boolean) => void;
 
   isDuplicateEntry: (operator: Operator, entry: AssemblySchema) => boolean;
   addHistoryEntry: (
@@ -116,6 +118,20 @@ export const createOperatorSlice: StateCreator<
           profiles: {
             ...state.context.profiles,
             [operator]: { ...profile, autoClearHistory },
+          },
+        },
+      }));
+    },
+
+    setAutoComplete: (operator, autoComplete) => {
+      const profile = get().actions.getProfile(operator);
+
+      set((state) => ({
+        context: {
+          ...state.context,
+          profiles: {
+            ...state.context.profiles,
+            [operator]: { ...profile, autoComplete },
           },
         },
       }));

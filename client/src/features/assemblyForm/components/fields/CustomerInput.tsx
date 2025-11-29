@@ -89,6 +89,7 @@ const CustomerInput = withForm({
           return (
             <AutoCompletePopover
               open={isPopoverOpen}
+              profile={profile}
               selectAutocomplete={(val) => {
                 field.setValue(val);
                 setIsPopoverOpen(false);
@@ -104,7 +105,7 @@ const CustomerInput = withForm({
                   handleHistoryShortcut(value, profile, form);
                 }}
               >
-                <WarningTooltip />
+                {showWarning && <WarningTooltip />}
               </field.Input>
             </AutoCompletePopover>
           );

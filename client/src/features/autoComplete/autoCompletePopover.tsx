@@ -3,17 +3,25 @@ import {
   PopoverAnchor,
   PopoverContent,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import type { OperatorProfile } from "@/types";
 
 const TEMP_AUTOCOMPLETE_FIELDS = ["barratt", "david wilson"];
 
 type Props = {
   children: React.ReactNode;
   open: boolean;
+  profile: OperatorProfile | null;
   selectAutocomplete: (label: string) => void;
 };
 
-const AutoCompletePopover = ({ children, open, selectAutocomplete }: Props) => {
+const AutoCompletePopover = ({
+  children,
+  open,
+  profile,
+  selectAutocomplete,
+}: Props) => {
+  if (profile && !profile.autoComplete) return <>{children}</>;
+
   return (
     <Popover open={open}>
       <PopoverAnchor>{children}</PopoverAnchor>

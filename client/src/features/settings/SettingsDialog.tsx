@@ -22,12 +22,17 @@ import {
 type Props = { operator: Operator };
 
 const SettingsDialog = ({ operator }: Props) => {
-  const { setTarget, setAutoClearHistory, setDarkMode, setTargetEnabled } =
-    useActions();
+  const {
+    setTarget,
+    setAutoClearHistory,
+    setDarkMode,
+    setTargetEnabled,
+    setAutoComplete,
+  } = useActions();
 
   const profile = useOperatorProfile(operator);
   if (!profile) return;
-  const { target, darkMode, autoClearHistory } = profile;
+  const { target, darkMode, autoClearHistory, autoComplete } = profile;
 
   return (
     <DialogContent
@@ -82,6 +87,16 @@ const SettingsDialog = ({ operator }: Props) => {
           <Switch
             checked={autoClearHistory}
             onCheckedChange={(next) => setAutoClearHistory(operator, next)}
+            id="airplane-mode"
+          />
+        </li>
+        <li className="flex items-center justify-between rounded-[8px] bg-gray-100 px-2 py-4">
+          <Label className="font-mono" htmlFor="airplane-mode">
+            Customer autocomplete:
+          </Label>
+          <Switch
+            checked={autoComplete}
+            onCheckedChange={(next) => setAutoComplete(operator, next)}
             id="airplane-mode"
           />
         </li>
