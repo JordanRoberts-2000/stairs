@@ -20,8 +20,7 @@ const AutoCompletePopover = ({
   profile,
   selectAutocomplete,
 }: Props) => {
-  if (profile && !profile.autoComplete) return <>{children}</>;
-
+  if (profile && !profile.autoComplete) return children;
   return (
     <Popover open={open}>
       <PopoverAnchor>{children}</PopoverAnchor>
