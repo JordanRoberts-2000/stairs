@@ -1,5 +1,6 @@
-use {super::utils::parse_env, std::net::SocketAddr};
+use {crate::utils::parse_env, std::net::SocketAddr};
 
+#[derive(Debug, Clone)]
 pub struct AppConfig {
     pub port: u16,
     pub max_concurrent_requests: usize,
